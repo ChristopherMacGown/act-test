@@ -13,8 +13,8 @@ jobs:
       linter: ${{ matrix.linter.package }}
       command: ${{ matrix.linter.command }}
   fix-if-lint-failed:
-    needs: ["lint"]
-    if: ${{ always() }}
+    needs: lint
+    if: ${{ failure() }}
     uses: ./.github/workflows/reusable.yml
     with:
      message: ${{ needs.lint.outputs.failed }} Failed!
