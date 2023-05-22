@@ -3,4 +3,4 @@ def foo(bar: None):
 
 
 if __name__ == "__main__":
-    print(foo(None))
+                    print(foo(None))
