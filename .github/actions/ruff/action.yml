@@ -17,6 +17,9 @@ runs:
    - name: install ${{ inputs.linter }}
      shell: bash
      run: pip install ${{ inputs.linter }}
+   - name: Where are we?
+     shell: bash
+     run: echo $(pwd) && ls -alh .
    - name: lint with ${{ inputs.linter }}
      shell: bash
      run: ${{ inputs.command }}
