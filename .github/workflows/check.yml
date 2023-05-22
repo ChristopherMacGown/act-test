@@ -6,7 +6,7 @@ jobs:
       matrix:
         linter:
           - package: ruff
-            command: ruff check --fix --exit-non-zero-on-fix ${{ github.workspace }}
+            command: ruff check --fix --exit-non-zero-on-fix .
     uses: ./.github/workflows/lint-python.yml
     with:
       linter: ${{ matrix.linter.package }}
