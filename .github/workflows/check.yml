@@ -18,4 +18,4 @@ jobs:
     if: failure()
     uses: ./.github/workflows/reusable.yml
     with:
-     message: ${{ jobs.lint.outputs.failed }} Failed!
+     message: ${{ needs.lint.outputs.failed }} Failed!
