@@ -4,15 +4,24 @@ on:
       linter:
         required: true
         type: string
+      cmd:
   
 jobs:
   lint:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
       - uses: ./.github/actions/ruff
+        with:
+          linter: ${{ inputs.linter }}
         if: ${{ inputs.linter }} == "ruff"
+  fix-if-failed:
+    needs: ["lint"]
+    if: failure()
+    uses: ./.github/workflows/reusable.yml
+    with:
+      message: "${{ inputs.linter }} ${{ failure() }}"
+

@@ -1,5 +1,9 @@
 name: ruff
 description: Runs the ruff linter against the local codebase.
+inputs:
+  linter:
+    description: The pypi package name for the requested linter.
+    required: true
 runs:
   using: composite
   steps:
@@ -7,10 +11,9 @@ runs:
    - uses: actions/setup-python@v4
      with:
        python-version: 3.11
-   - name: install ruff
+   - name: install ${{ inputs.linter }}
      shell: bash
-     run: pip install ruff
+     run: pip install ${{ inputs.linter }}
    - name: lint with ruff
      shell: bash
-     run: |
-      echo ruff check --exit-non-zero-on-fix --fix ${{ github.workspace }} && /bin/false
+     run: ruff check --exit-non-zero-on-fix --fix ${{ github.workspace }}
