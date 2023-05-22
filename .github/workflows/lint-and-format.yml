@@ -25,7 +25,6 @@ jobs:
         continue-on-error: true
         run: echo "LINT and format Vue"
       - uses: ./.github/actions/commit-changes
-        if: ${{ failure() }}
         with:
           failed: ruff=${{ steps.ruff.outcome }},black=${{steps.black.outcome}},vue=${{steps.vue.outcome}}
           repo: ${{ github.repository }}
