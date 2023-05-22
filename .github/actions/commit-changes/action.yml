@@ -4,10 +4,47 @@ inputs:
   failed:
    description: the names of the failed lints.
    required: true
+  commit-message-header:
+    description: The header for the commit message
+    default: Automatic update with format changes from linters.
 runs:
   using: composite
   steps:
+    - id: commit-message
+      shell: python
+      run: |
+        import os
+
+        def output(key, lines):
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+            print("COMMIT_MESSAGE<<EOF", file=output)
+            for line in lines:
+              print(line, file=output)
+            print("EOF", file=output)
+
+        def failure(line):
+          package, status = line.split("=")
+          if status == "failure":
+            return f"    * Changes proposed from {package}"
+
+
+        HEADER = "${{ inputs.commit-message-header }}"
+        FAILURES = [failure(line) for line in "${{ inputs.failed }}".split(",")]
+
+        output(
+          "COMMIT_MESSAGE",
+          [HEADER, "\n"] + 
+          [f for f in FAILURES if f] +
+          ["\n", "Signed-off-by: Rosie <support@drill.run>"]
+        )
     - shell: bash
       run: |
+        git config --global user.name "[bot] rosie"
+        git config --global user.email "rosie@drill.run"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
         git status
-        echo ${{ inputs.failed }}
+        git add -u
+        git commit -F- <<EOF
+          ${{ steps.commit-message.outputs.COMMIT_MESSAGE }}
+        EOF
+        git push
