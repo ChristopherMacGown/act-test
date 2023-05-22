@@ -1,0 +1,13 @@
+name: commit-changes
+description: Commit the changes back to the repository
+inputs:
+  failed:
+   description: the names of the failed lints.
+   required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        git status
+        echo ${{ inputs.failed }}
