@@ -5,3 +5,4 @@ jobs:
     uses: ./.github/workflows/lint-python.yml
     with:
       linter: ruff
+      command: ruff check --fix --exit-non-zero-on-fix ${{ github.workspace }}
