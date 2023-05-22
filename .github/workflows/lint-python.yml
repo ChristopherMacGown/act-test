@@ -4,8 +4,6 @@ on:
       linter:
         required: true
         type: string
-      cmd:
-  
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -20,7 +18,7 @@ jobs:
         if: ${{ inputs.linter }} == "ruff"
   fix-if-failed:
     needs: ["lint"]
-    if: failure()
+    if: ${{ failure() }}
     uses: ./.github/workflows/reusable.yml
     with:
       message: "${{ inputs.linter }} ${{ failure() }}"
