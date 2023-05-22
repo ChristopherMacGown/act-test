@@ -19,4 +19,4 @@ runs:
      run: pip install ${{ inputs.linter }}
    - name: lint with ${{ inputs.linter }}
      shell: bash
-     run: ${{ inputs.command }} 
+     run: ${{ inputs.command }}

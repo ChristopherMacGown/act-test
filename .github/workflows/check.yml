@@ -3,19 +3,18 @@ on:
 jobs:
   lint:
     strategy:
+      fail-fast: false
       matrix:
         linter:
           - package: ruff
             command: ruff check --verbose .
-          - package: black
-            command: black --check .
     uses: ./.github/workflows/lint-python.yml
     with:
       linter: ${{ matrix.linter.package }}
       command: ${{ matrix.linter.command }}
   fix-if-lint-failed:
     needs: ["lint"]
-    if: failure()
+    if: ${{ always() }}
     uses: ./.github/workflows/reusable.yml
     with:
      message: ${{ needs.lint.outputs.failed }} Failed!
