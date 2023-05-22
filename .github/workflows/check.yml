@@ -6,8 +6,16 @@ jobs:
       matrix:
         linter:
           - package: ruff
-            command: ruff check --fix --exit-non-zero-on-fix .
+            command: ruff check --verbose .
+          - package: black
+            command: black --check .
     uses: ./.github/workflows/lint-python.yml
     with:
       linter: ${{ matrix.linter.package }}
       command: ${{ matrix.linter.command }}
+  fix-if-lint-failed:
+    needs: ["lint"]
+    if: failure()
+    uses: ./.github/workflows/reusable.yml
+    with:
+     message: ${{ jobs.lint.outputs.failed }} Failed!

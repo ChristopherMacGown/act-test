@@ -10,19 +10,20 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    continue-on-error: true
+    outputs:
+      failed: ${{ steps.lint.outputs.failed }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
-      - uses: ./.github/actions/ruff
+      - id: lint
+        uses: ./.github/actions/ruff
         with:
           linter: ${{ inputs.linter }}
           command: ${{ inputs.command }}
-  fix-if-failed:
-    needs: ["lint"]
-    if: ${{ failure() }}
-    uses: ./.github/workflows/reusable.yml
-    with:
-      message: "${{ inputs.linter }}"
-
+      - id: fail
+        if: ${{ steps.lint.outcome }} == "failure"
+        run:
+          echo failed=${{ inputs.linter }} >> $GITHUB_OUTPUT && /bin/false

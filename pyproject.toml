@@ -1,0 +1,8 @@
+[tool.black]
+target-version = ['py39']
+extend-exclude = """(.*)/migrations|apps/(.*).py"""
+
+[tool.ruff]
+select = ["E", "F", "I"]
+exclude = ["migrations"]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
