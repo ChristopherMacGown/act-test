@@ -1,15 +1,7 @@
 on: 
-  push:
-    branches: ["!main"]
+  - push
 jobs:
   lint-ruff:
     uses: ./.github/workflows/lint-python.yml
     with:
       linter: ruff
-  fix-if-failed:
-    needs:
-      - lint-ruff
-    if: failure()
-    uses: ./.github/workflows/reusable.yml
-    with:
-      message: "HELLO! ${{ failure() }}"
