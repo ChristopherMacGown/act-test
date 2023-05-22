@@ -27,3 +27,5 @@ jobs:
       - uses: ./.github/actions/commit-changes
         with:
           failed: ruff=${{ steps.ruff.outcome }},black=${{steps.black.outcome}},vue=${{steps.vue.outcome}}
+          repo: ${{ github.repository }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

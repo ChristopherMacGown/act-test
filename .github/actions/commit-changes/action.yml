@@ -4,6 +4,12 @@ inputs:
   failed:
    description: the names of the failed lints.
    required: true
+  repo:
+    description: The local github repository
+    required: true
+  repo-token:
+    description: Github PAT
+    required: true
   commit-message-header:
     description: The header for the commit message
     default: Automatic update with format changes from linters.
@@ -35,13 +41,13 @@ runs:
           "COMMIT_MESSAGE",
           [HEADER, "\n"] + 
           [f for f in FAILURES if f] +
-          ["\n", "Signed-off-by: Rosie <support@drill.run>"]
+          ["\n", "Signed-off-by: [bot] rosie <rosie@drill.run>"]
         )
     - shell: bash
       run: |
         git config --global user.name "[bot] rosie"
         git config --global user.email "rosie@drill.run"
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+        git remote set-url origin https://x-access-token:${{ inputs.repo-token }}@github.com/${{ inputs.repo }}
         git status
         git add -u
         git commit -F- <<EOF
