@@ -1,0 +1,13 @@
+on:
+  workflow_call:
+    inputs:
+      message:
+        required: true
+        type: string
+jobs:
+  reuse-locally:
+    runs-on: ubuntu-latest
+    steps:
+      - name: hello!
+        run: |
+          echo ${{ inputs.message }}
