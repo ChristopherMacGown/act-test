@@ -6,14 +6,9 @@ jobs:
     uses: ./.github/workflows/lint-python.yml
     with:
       linter: ruff
-  lint-black:
-    uses: ./.github/workflows/lint-python.yml
-    with:
-      linter: black
   fix-if-failed:
     needs: 
       - lint-ruff 
-      - lint-black
     if: ${{ failure() }}
     uses: ./.github/workflows/reusable.yml
     with:
