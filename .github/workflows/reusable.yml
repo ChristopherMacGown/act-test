@@ -11,3 +11,4 @@ jobs:
       - name: hello!
         run: |
           echo ${{ inputs.message }}
+          /bin/false
