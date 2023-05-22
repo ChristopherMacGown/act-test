@@ -5,4 +5,5 @@ runs:
   steps:
    - shell: /bin/bash
      run: |
-      echo "RUFF!"
+       pip install ruff
+       ruff check --fix . || echo "FAILED=ruff" >> "$GITHUB_OUTPUT"
