@@ -8,8 +8,7 @@ jobs:
       linter: ruff
   fix-if-failed:
     needs: 
-      - lint-ruff 
-    if: ${{ failure() }}
+      - lint-ruff
     uses: ./.github/workflows/reusable.yml
     with:
-      message: "HELLO!"
+      message: "HELLO! ${{ failure() }}"
