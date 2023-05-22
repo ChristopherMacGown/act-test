@@ -4,6 +4,9 @@ inputs:
   linter:
     description: The pypi package name for the requested linter.
     required: true
+  command:
+    description: The linter command line arguments
+    required: true
 runs:
   using: composite
   steps:
@@ -14,6 +17,6 @@ runs:
    - name: install ${{ inputs.linter }}
      shell: bash
      run: pip install ${{ inputs.linter }}
-   - name: lint with ruff
+   - name: lint with ${{ inputs.linter }}
      shell: bash
-     run: ruff check --exit-non-zero-on-fix --fix ${{ github.workspace }}
+     run: ${{ inputs.command }}

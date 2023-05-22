@@ -18,7 +18,7 @@ jobs:
       - uses: ./.github/actions/ruff
         with:
           linter: ${{ inputs.linter }}
-        if: ${{ inputs.linter }} == "ruff"
+          command: ${{ inputs.command }}
   fix-if-failed:
     needs: ["lint"]
     if: ${{ failure() }}
