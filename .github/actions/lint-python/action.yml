@@ -1,5 +1,5 @@
-name: ruff
-description: Runs the ruff linter against the local codebase.
+name: lint-python
+description: Runs the specified linter against the local codebase.
 inputs:
   linter:
     description: The pypi package name for the requested linter.
