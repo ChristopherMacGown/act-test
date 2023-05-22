@@ -1,8 +1,13 @@
 on: 
   - push
 jobs:
-  lint-ruff:
+  lint:
+    strategy:
+      matrix:
+        linter:
+          - package: ruff
+            command: ruff check --fix --exit-non-zero-on-fix ${{ github.workspace }}
     uses: ./.github/workflows/lint-python.yml
     with:
-      linter: ruff
-      command: ruff check --fix --exit-non-zero-on-fix ${{ github.workspace }}
+      linter: ${{ matrix.linter.package }}
+      command: ${{ matrix.linter.command }}
