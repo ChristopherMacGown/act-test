@@ -4,3 +4,5 @@ jobs:
   lint:
     uses: ./.github/workflows/lint-and-format.yml
     secrets: inherit
+    permissions:
+     contents: write
