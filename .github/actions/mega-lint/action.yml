@@ -16,7 +16,7 @@ runs:
   steps:
     - uses: actions/checkout@v3
     - if: ${{ inputs.type == 'node' }}
-      uses: actions/setup-node
+      uses: actions/setup-node@v3
       with:
         node-version: 18.x
     - if: ${{ inputs.type == 'node' }}
