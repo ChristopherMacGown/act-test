@@ -19,7 +19,7 @@ jobs:
             command: black --check .
     steps:
       - uses: actions/checkout@v3
-      - id: ${{ matrix.linters.pkg }}
+      - id: lint-python-${{ matrix.linters.pkg }}
         uses: ./.github/actions/lint-python
         with:
           linter: ${{ matrix.linters.pkg }}
