@@ -23,8 +23,7 @@ jobs:
       - id: prettier
         run: echo "Would format with prettier"
       - run: echo "Run Tests"
-      - if: ${{ failure() }}
-        run: |
+      - run: |
           git config --global user.name ${{ inputs.committer-name }}
           git config --global user.email ${ inputs.committer-email }}
           echo "${{ steps.ruff.outputs }}"
