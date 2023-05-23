@@ -11,11 +11,13 @@ jobs:
             command: ruff check .
           - pkg: black
             command: black --check .
+          - pkg: prettier
+            command: prettier -c front-end/src/
     name: lint ${{ matrix.linters.pkg }}
     steps:
       - uses: actions/checkout@v3
       - id: lint
-        uses: ./.github/actions/lint-python
+        uses: ./.github/actions/mega-lint
         with:
           linter: ${{ matrix.linters.pkg }}
           command: ${{ matrix.linters.command }}
