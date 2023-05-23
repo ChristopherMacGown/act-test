@@ -10,4 +10,5 @@ jobs:
         run: echo "Would format with black"
       - id: prettier
         run: echo "Would format with prettier"
+      - run: echo "Run Tests"
       - run: echo "WOULD FORMAT"

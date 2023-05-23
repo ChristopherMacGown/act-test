@@ -12,7 +12,8 @@ jobs:
           - pkg: black
             command: black --check .
           - pkg: prettier
-            command: prettier -c front-end/src/
+            command: npx prettier -c front-end/src/
+            type: node
     name: lint ${{ matrix.linters.pkg }}
     steps:
       - uses: actions/checkout@v3
