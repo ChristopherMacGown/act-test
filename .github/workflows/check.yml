@@ -7,8 +7,6 @@ jobs:
   format:
     needs: [lint]
     if: ${{ failure('lint') }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "WTF"
-          echo ${{ needs.lint.result }}
+    uses: ./.github/workflows/lint.yml
+    with:
+      format: true
