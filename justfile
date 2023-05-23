@@ -1,2 +1,4 @@
+set dotenv-load
+
 act:
-	gh act -s GITHUB_TOKEN=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 push
+	gh act -s GITHUB_TOKEN=$GITHUB_TOKEN push
