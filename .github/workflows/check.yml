@@ -10,3 +10,9 @@ jobs:
     needs: [lint, test]
     if: ${{ failure('lint') }}
     uses: ./.github/workflows/format.yml
+  build:
+    runs-on: ubuntu-latest
+    needs: [format]
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
