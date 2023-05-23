@@ -13,7 +13,7 @@ jobs:
       - run: echo ${{ inputs.format }}
   lint:
     runs-on: ubuntu-latest
-    if: ${{ inputs.format == 'false '}}
+    if: ${{ inputs.format == false }}
     steps:
       - uses: actions/checkout@v3
       - id: lint-ruff
