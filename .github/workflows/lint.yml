@@ -6,11 +6,6 @@ on:
         default: false
 
 jobs:
-  wut:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{ inputs.format == 'false' }}
-      - run: echo ${{ inputs.format }}
   lint:
     runs-on: ubuntu-latest
     if: ${{ inputs.format == false }}
@@ -30,6 +25,6 @@ jobs:
       - run: /bin/false
   format:
     runs-on: ubuntu-latest
-    if: ${{ inputs.format == 'true' }}
+    if: ${{ inputs.format == true }}
     steps:
       - run: echo "WOULD FORMAT"
