@@ -24,6 +24,6 @@ jobs:
         run: echo "Would format with prettier"
       - run: echo "Run Tests"
       - run: |
-          git config --global user.name ${{ inputs.committer-name }}
-          git config --global user.email ${ inputs.committer-email }}
           echo "${{ steps.ruff.outputs }}"
+          git config --global user.name ${{ inputs.committer-name }}
+          git config --global user.email ${{ inputs.committer-email }}
