@@ -1,14 +1,26 @@
 on:
   workflow_call:
+    inputs:
+      committer-name:
+        type: string
+        default: "[bot] rosie"
+      committer-email:
+        type: string
+        default: "rosie@drill.run"
 jobs:
    format:
     runs-on: ubuntu-latest
     steps:
       - id: ruff
-        run: echo "Would format with ruff"
+        uses: ./.github/actions/mega-lint
+        with:
+          linter: ruff
+          command: ruff check --fix --exit-non-zero-on-fixed .
       - id: black
         run: echo "Would format with black"
       - id: prettier
         run: echo "Would format with prettier"
       - run: echo "Run Tests"
-      - run: echo "WOULD FORMAT"
+      - run: |
+          git config --global user.name ${{ inputs.committer-name }}
+          git config --global user.email ${ inputs.committer-email }}
