@@ -6,6 +6,10 @@ on:
         default: false
 
 jobs:
+  wut:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ fromJson( inputs.format ) }}
   lint:
     runs-on: ubuntu-latest
     if: ${{ inputs.format == 'false '}}
