@@ -3,8 +3,11 @@ on:
 jobs:
    format:
     runs-on: ubuntu-latest
-    if: ${{ inputs.format == true }}
     steps:
       - id: ruff
         run: echo "Would format with ruff"
+      - id: black
+        run: echo "Would format with black"
+      - id: prettier
+        run: echo "Would format with prettier"
       - run: echo "WOULD FORMAT"
