@@ -11,6 +11,7 @@ jobs:
    format:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - id: ruff
         uses: ./.github/actions/mega-lint
         with:
