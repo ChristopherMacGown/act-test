@@ -1,0 +1,10 @@
+on:
+  workflow_call:
+jobs:
+   format:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.format == true }}
+    steps:
+      - id: ruff
+        run: echo "Would format with ruff"
+      - run: echo "WOULD FORMAT"

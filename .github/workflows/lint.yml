@@ -1,14 +1,8 @@
 on:
   workflow_call:
-    inputs:
-      format:
-        type: boolean
-        default: false
-
 jobs:
   lint:
     runs-on: ubuntu-latest
-    if: ${{ inputs.format == false }}
     strategy:
       fail-fast: false
       matrix:
@@ -20,16 +14,9 @@ jobs:
     name: lint ${{ matrix.linters.pkg }}
     steps:
       - uses: actions/checkout@v3
-      - id: lint-python
+      - id: lint
         uses: ./.github/actions/lint-python
         with:
           linter: ${{ matrix.linters.pkg }}
           command: ${{ matrix.linters.command }}
       - run: /bin/false
-  format:
-    runs-on: ubuntu-latest
-    if: ${{ inputs.format == true }}
-    steps:
-      - id: ruff
-        run: echo "Would format with ruff"
-      - run: echo "WOULD FORMAT"

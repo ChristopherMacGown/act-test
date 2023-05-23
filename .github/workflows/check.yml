@@ -7,6 +7,4 @@ jobs:
   format:
     needs: [lint]
     if: ${{ failure('lint') }}
-    uses: ./.github/workflows/lint.yml
-    with:
-      format: true
+    uses: ./.github/workflows/format.yml
