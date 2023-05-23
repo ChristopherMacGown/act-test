@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/mega-lint
         with:
           linter: ruff
-          command: ruff check --format json --fix . | jq '"remaining=\( map(select(.fix == null)) | length )"' >> $GITHUB_OUTPUT
+          command: ruff check --format json --fix . | jq '"remaining=1"' >> $GITHUB_OUTPUT
       - id: black
         run: echo "Would format with black"
       - id: prettier

@@ -30,4 +30,6 @@ runs:
         python-version: 3.11
     - if: ${{ inputs.type == 'python' }}
       shell: bash
-      run: pip install ${{ inputs.linter }} && ${{ inputs.command }}
+      run: |
+        pip install ${{ inputs.linter }}
+        ${{ inputs.command }}
