@@ -1,8 +1,5 @@
+
 import foo
-import bar
-
-
-
 
 
 def foo(bar: None):

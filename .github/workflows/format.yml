@@ -17,12 +17,14 @@ jobs:
         uses: ./.github/actions/mega-lint
         with:
           linter: ruff
-          command: ruff check --fix --exit-non-zero-on-fix .
+          command: (ruff check --fix . | grep remaining) && /bin/true || echo "ruff=remaining" >> "$GITHUB_OUTPUT"
       - id: black
         run: echo "Would format with black"
       - id: prettier
         run: echo "Would format with prettier"
       - run: echo "Run Tests"
-      - run: |
+      - if: ${{ failed() }}
+        run: |
           git config --global user.name ${{ inputs.committer-name }}
           git config --global user.email ${ inputs.committer-email }}
+          echo "${{ steps.ruff.outputs }}"
