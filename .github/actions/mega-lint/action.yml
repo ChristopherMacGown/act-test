@@ -15,6 +15,8 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v3
+    - shell: bash
+      run: apt-get update && apt-get install jq
     - if: ${{ inputs.type == 'node' }}
       uses: actions/setup-node@v3
       with:
