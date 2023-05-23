@@ -11,6 +11,10 @@ inputs:
   command:
     description: The linter command line arguments
     required: true
+outputs:
+  remaining:
+    description: Number of remaining fixes.
+    value: ${{ steps.remaining.outputs.remaining }}
 runs:
   using: composite
   steps:
@@ -32,3 +36,6 @@ runs:
       run: |
         pip install ${{ inputs.linter }}
         ${{ inputs.command }} >> $GITHUB_OUTPUT
+    - id: remaining
+      shell: bash
+      run: echo "remaining=${{ join(steps.*.outputs.remaining, '') }}" >> $GITHUB_OUTPUT

@@ -22,5 +22,3 @@ jobs:
       - run: echo "Run Tests"
       - run: |
           echo "${{ fromJSON(steps.ruff.outputs) }}"
-          git config --global user.name ${{ inputs.committer-name }}
-          git config --global user.email ${{ inputs.committer-email }}
