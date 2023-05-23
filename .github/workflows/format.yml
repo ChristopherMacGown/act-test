@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/mega-lint
         with:
           linter: ruff
-          command: ruff check --format json --fix . | jq '"remaining=1"' >> ${{ GITHUB_OUTPUT }}
+          command: ruff check --format json --fix . | jq '"remaining=1"'
       - run: echo "Run Tests"
       - run: |
           echo "${{ steps.ruff.outputs.remaining }}"

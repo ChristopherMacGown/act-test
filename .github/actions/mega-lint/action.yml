@@ -31,5 +31,4 @@ runs:
       shell: bash
       run: |
         pip install ${{ inputs.linter }}
-        echo "WTF: ${{ inputs.command }}"
-        ${{ inputs.command }} | echo $?
+        ${{ inputs.command }} >> $GITHUB_OUTPUT
