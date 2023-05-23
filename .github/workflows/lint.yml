@@ -17,9 +17,10 @@ jobs:
             command: ruff check .
           - pkg: black
             command: black --check .
+    name: lint ${{ matrix.linters.pkg }}
     steps:
       - uses: actions/checkout@v3
-      - id: lint-python-${{ matrix.linters.pkg }}
+      - id: lint-python
         uses: ./.github/actions/lint-python
         with:
           linter: ${{ matrix.linters.pkg }}
