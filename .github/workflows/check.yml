@@ -2,7 +2,13 @@ on:
   - push
 jobs:
   lint:
-    uses: ./.github/workflows/lint-and-format.yml
+    uses: ./.github/workflows/lint.yml
     secrets: inherit
-    permissions:
-     contents: write
+  format:
+    needs: [lint]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "WTF"
+          echo ${{ needs.lint.result }}

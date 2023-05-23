@@ -1,6 +1,8 @@
 name: lint-python
 description: Runs the specified linter against the local codebase.
 inputs:
+  token:
+    description: The Github Token
   linter:
     description: The pypi package name for the requested linter.
     required: true
@@ -13,6 +15,7 @@ runs:
    - uses: actions/checkout@v3
    - uses: actions/setup-python@v4
      with:
+       token: ${{ inputs.token }}
        python-version: 3.11
    - name: install ${{ inputs.linter }}
      shell: bash

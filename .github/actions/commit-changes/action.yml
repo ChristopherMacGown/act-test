@@ -48,9 +48,10 @@ runs:
         git config --global user.name "[bot] rosie"
         git config --global user.email "rosie@drill.run"
         git remote set-url origin https://x-access-token:${{ inputs.repo-token }}@github.com/${{ inputs.repo }}
-        git status
-        git add -u
-        git commit -F- <<EOF
-          ${{ steps.commit-message.outputs.COMMIT_MESSAGE }}
+        if [ -n  $( git status --porcelain ) ]; then
+          git add -u
+          git commit -F- <<EOF
+            ${{ steps.commit-message.outputs.COMMIT_MESSAGE }}
         EOF
-        git push
+          git push
+        fi
