@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: ruff
+        name: format ruff
         uses: ./.github/actions/mega-lint
         with:
           linter: ruff
