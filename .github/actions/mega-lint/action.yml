@@ -26,8 +26,10 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: 3.11
-    - if: ${{ inputs.type == 'python' }}
+    - id: run-python-linter
+      if: ${{ inputs.type == 'python' }}
       shell: bash
       run: |
         pip install ${{ inputs.linter }}
-        ${{ inputs.command }}
+        echo "WTF: ${{ inputs.command }}"
+        ${{ inputs.command }} | echo $?

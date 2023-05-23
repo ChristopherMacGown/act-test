@@ -18,10 +18,6 @@ jobs:
         with:
           linter: ruff
           command: ruff check --format json --fix . | jq '"remaining=1"'
-      - id: black
-        run: echo "Would format with black"
-      - id: prettier
-        run: echo "Would format with prettier"
       - run: echo "Run Tests"
       - run: |
           echo "${{ steps.ruff.outputs.remaining }}"
