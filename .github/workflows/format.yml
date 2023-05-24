@@ -35,7 +35,7 @@ jobs:
                     | map({(.[0].key): length}) 
                     | add'
           )
-          REMAINING=$(echo "${LINT_RESULT}" | jq 'select(.remaining)')
-          FIXED=$(echo "${LINT_RESULT}" | jq 'select(.fixable)')
+          REMAINING=$(echo "${LINT_RESULT}" | jq '.remaining')
+          FIXED=$(echo "${LINT_RESULT}" | jq '.fixable')
 
           echo "stuff: ${FIXED} / ${REMAINING}"
