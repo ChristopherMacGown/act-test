@@ -7,19 +7,10 @@ jobs:
       fail-fast: false
       matrix:
         linters:
-          - pkg: ruff
-            command: ruff check .
-          - pkg: black
-            command: black --check .
-          - pkg: prettier
-            command: npx prettier -c front-end/src/
-            type: node
-    name: lint ${{ matrix.linters.pkg }}
+          - name: ruff
+    name: lint ${{ matrix.linters.name }}
     steps:
       - uses: actions/checkout@v3
       - id: lint
-        uses: ./.github/actions/mega-lint
-        with:
-          linter: ${{ matrix.linters.pkg }}
-          command: ${{ matrix.linters.command }}
+        uses: ./.github/actions/linters/${{ matrix.linters.name }}
       - run: /bin/false

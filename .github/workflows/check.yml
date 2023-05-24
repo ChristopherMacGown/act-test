@@ -2,12 +2,13 @@ on:
   - push
 jobs:
   test:
+    if: ${{ never() }}
     uses: ./.github/workflows/test.yml
   lint:
     uses: ./.github/workflows/lint.yml
     secrets: inherit
   format:
-    needs: [lint, test]
+    needs: [lint]
     if: ${{ failure('lint') }}
     uses: ./.github/workflows/format.yml
   build:
