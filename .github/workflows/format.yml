@@ -46,8 +46,11 @@ jobs:
         name: push changes
         if: ${{ steps.results.outputs.fixable >= 1 }}
         run: |
-          echo 'git config --global user.name "${{ inputs.committer-name }}"'
-          echo 'git config --global user.email "${{ inputs.committer-email }}"'
+          git config --global user.name "${{ inputs.committer-name }}"
+          git config --global user.email "${{ inputs.committer-email }}"
+          git status
+          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+
       - id: fail-on-remaining
         if: ${{ steps.results.outputs.remaining >= 1 }}
         run: /bin/false
