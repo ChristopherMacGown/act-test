@@ -33,10 +33,10 @@ jobs:
       - id: results
         run: |
           LINTERS_WITH_FIXES="";
-          if [ ${{ contains(steps.ruff.outputs.report, 'fixable') }}]; then
+          if [ ${{ contains(steps.ruff.outputs.report, 'fixable') }} ]; then
             LINTERS_WITH_FIXES+=" * ruff\n"
           fi
-          if [ ${{ contains(steps.black.outputs.report, 'fixable') }}]; then
+          if [ ${{ contains(steps.black.outputs.report, 'fixable') }} ]; then
             LINTERS_WITH_FIXES+=" * black\n"
           fi
 
