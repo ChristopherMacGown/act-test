@@ -29,10 +29,10 @@ jobs:
       - id: remainder
         run: |
           echo remaining=$(
-            echo <<-EOT
+            jq -s 'map(select(.remaining)) | count' <<-EOT
               ${{ steps.ruff.outputs.report }}
               ${{ steps.black.outputs.report }}
-            EOT | jq -s 'map(select(.remaining)) | count'
+            EOT
           ) >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - run: |
