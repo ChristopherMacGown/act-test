@@ -7,10 +7,11 @@ jobs:
       fail-fast: false
       matrix:
         linters:
-          - name: ruff
+          - name: name
+            action: ./.github/actions/linters/ruff
     name: lint ${{ matrix.linters.name }}
     steps:
       - uses: actions/checkout@v3
       - id: lint
-        uses: ./.github/actions/linters/${{ matrix.linters.name }}
+        uses: ${{ matrix.linters.action }}
       - run: /bin/false
