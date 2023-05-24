@@ -35,7 +35,9 @@ jobs:
           REMAINING=0;
           FIXABLE=0;
 
-          ${{ steps.ruff.outputs.report }}
+          for report in ${{ toJSON(steps.*.outputs.report) }}; do
+            echo "$report"
+          fi
 
           echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
           echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
