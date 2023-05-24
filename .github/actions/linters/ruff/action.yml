@@ -15,4 +15,10 @@ runs:
       shell: bash
       run: |
         pip install ruff
-        ruff check --format json . | jq 'group_by(.fix | type) | map({(if .[0].fix == null then "not-fixable" else "fixable" end ): length}) | add'
+        echo report=$(
+          ruff check --format json . \
+            | jq 'group_by(.fix | type) 
+                    | map({(if .[0].fix == null then "not-fixable" else "fixable" end ): length}) 
+                    | add'
+        ) >> $GITHUB_OUTPUT
+        
