@@ -1,6 +1,9 @@
 on:
   workflow_call:
     inputs:
+      commit-message-header:
+        type: string
+        default: Automatic update with format changes from linters.
       committer-name:
         type: string
         default: "[bot] rosie"
@@ -50,6 +53,12 @@ jobs:
           git config --global user.email "${{ inputs.committer-email }}"
           git status
           git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+          git add -u
+          git commit -F- <<EOF
+            ${{ inputs.commit-message-header}}
+
+            Signed-off-by: ${{ inputs.committer-name }} <${{ inputs.committer-email }}>
+          EOF
 
       - id: fail-on-remaining
         if: ${{ steps.results.outputs.remaining >= 1 }}
