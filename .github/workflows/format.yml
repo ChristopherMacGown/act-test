@@ -26,10 +26,6 @@ jobs:
         with: 
           linter: black
           action: format
-      - id: remainder
-        run: |
-          echo "${{ toJSON(steps.*.outputs.report) }}" 
-          echo remaining=10 >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - run: |
-          echo "${{ fromJSON(steps.remainder.outputs.remaining) }}"
+          echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.remaining)) | map(add) | add"
