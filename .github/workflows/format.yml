@@ -27,7 +27,8 @@ jobs:
           linter: black
           action: format
       - run: echo "Run Tests"
-      - run: |
+      - id: results
+        run: |
           LINT_RESULT=$(
             echo "${{ toJSON(steps.*.outputs.report) }}" |
               jq 'map(fromjson | to_entries[]) 
@@ -35,7 +36,17 @@ jobs:
                     | map({(.[0].key): length}) 
                     | add'
           )
-          REMAINING=$(echo "${LINT_RESULT}" | jq '.remaining')
-          FIXED=$(echo "${LINT_RESULT}" | jq '.fixable')
 
-          echo "stuff: ${FIXED} / ${REMAINING}"
+          REMAINING=$(echo $LINT_RESULT | jq '.remaining')
+          FIXABLE=$(echo $LINT_RESULT | jq '.fixable')
+
+          echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
+          echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
+      - id: push-changes
+        if: ${{ steps.results.fixable > 1}}
+        run: |
+          echo 'git config --global user.name "${{ inputs.committer-name }}"'
+          echo 'git config --global user.email "${{ inputs.committer-email }}"'
+      - id: fail-on-remaining
+        if: ${{ steps.results.remaining > 1 }}
+        run: /bin/false
