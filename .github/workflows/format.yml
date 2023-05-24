@@ -32,6 +32,8 @@ jobs:
       - run: echo "Run Tests"
       - id: results
         run: |
+          echo ruff -> ${{ contains(steps.ruff.outputs.report, "fixable") }}
+
           LINT_RESULT=$(
             echo "${{ toJSON(steps.*.outputs.report) }}" |
               jq 'map(fromjson | to_entries[]) 
@@ -45,6 +47,7 @@ jobs:
 
           echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
           echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
+          echo "linters-with-fixes=" >> $GITHUB_OUTPUT
       - id: push-changes
         name: push changes
         if: ${{ steps.results.outputs.fixable >= 1 }}

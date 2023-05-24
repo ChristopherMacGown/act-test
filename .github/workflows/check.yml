@@ -6,11 +6,13 @@ jobs:
     uses: ./.github/workflows/test.yml
   lint:
     uses: ./.github/workflows/lint.yml
-    secrets: inherit
   format:
     needs: [lint]
     if: ${{ failure('lint') }}
     uses: ./.github/workflows/format.yml
+    secrets: inherit
+    permissions:
+      contents: write
   build:
     runs-on: ubuntu-latest
     needs: [format]
