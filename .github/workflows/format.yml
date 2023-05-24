@@ -28,7 +28,14 @@ jobs:
           action: format
       - run: echo "Run Tests"
       - run: |
-          REMAINING=$(echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.remaining)) | map(add) | add')
-          FIXED=$(echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.fixabl)) | map(add) | add')
+          LINT_RESULT=$(
+            echo "${{ toJSON(steps.*.outputs.report) }}" |
+              jq 'map(fromjson | to_entries[]) 
+                    | group_by(.key) 
+                    | map({(.[0].key): length}) 
+                    | add'
+          )
+          REMAINING=$(echo "${LINT_RESULT}" | jq 'select(.remaining)')
+          FIXED=$(echo "${LINT_RESULT}" | jq 'select(.fixable)')
 
           echo "stuff: ${FIXED} / ${REMAINING}"
