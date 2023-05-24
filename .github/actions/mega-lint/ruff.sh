@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -euxo pipefail
 source ${BASH_SOURCE%/*}/common.sh
 
 COMMAND=${1:-""}

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -euxo pipefail
 
 source ${BASH_SOURCE%/*}/common.sh
 
