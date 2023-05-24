@@ -41,6 +41,8 @@ jobs:
           FIXABLE=$(echo $LINT_RESULT | jq '.fixable')
           echo XXXXXXX
           echo ${LINT_RESULT}
+          echo ${FIXABLE}
+          echo ${REMAINING}
           echo XXXXXXX
           echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
           echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
