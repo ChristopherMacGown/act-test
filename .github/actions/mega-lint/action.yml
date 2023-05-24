@@ -27,4 +27,4 @@ runs:
         python-version: 3.11
     - id: run
       shell: bash
-      run: ${{ github.action_path }}/${{ inputs.linter }}.sh ${{ inputs.action }}>> $GITHUB_OUTPUT
+      run: ${{ github.action_path }}/${{ inputs.linter }}.sh ${{ inputs.action }}

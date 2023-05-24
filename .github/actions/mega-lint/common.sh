@@ -4,7 +4,7 @@ install_pip_package() {
         exit -1
     fi
 
-    pip install --disable-pip-version-check ${package_name}
+    pip install -qqq --disable-pip-version-check ${package_name}
 }
 
 report() {
@@ -12,5 +12,6 @@ report() {
     if [ -z "${report}" ]; then
         exit -1
     fi
-    echo -n "report=${report}"
+
+    echo -n "report=${report}" >>$GITHUB_OUTPUT
 }
