@@ -26,7 +26,14 @@ jobs:
         with: 
           linter: black
           action: format
+      - id: remainder
+        run: |
+          echo remaining=$(
+            echo <<-EOF
+            ${{ steps.ruff.outputs.report }}
+            ${{ steps.black.outputs.report }}
+            EOF | jq 'map(select(.remaining)) | count' 
+          ) >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - run: |
-          echo "${{ fromJSON(steps.ruff.outputs.report ) }}"
-          echo "${{ fromJSON(steps.black.outputs.report ) }}"
+          echo "${{ fromJSON(steps.remainder.outputs.remaining) }}"
