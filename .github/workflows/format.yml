@@ -39,15 +39,15 @@ jobs:
 
           REMAINING=$(echo $LINT_RESULT | jq '.remaining')
           FIXABLE=$(echo $LINT_RESULT | jq '.fixable')
-          
+
           echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
           echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
       - id: push-changes
         name: push changes
-        if: ${{ step.results.outputs.fixable >= 1 }}
+        if: ${{ steps.results.outputs.fixable >= 1 }}
         run: |
           echo 'git config --global user.name "${{ inputs.committer-name }}"'
           echo 'git config --global user.email "${{ inputs.committer-email }}"'
       - id: fail-on-remaining
-        if: ${{ step.results.outputs.remaining >= 1 }}
+        if: ${{ steps.results.outputs.remaining >= 1 }}
         run: /bin/false
