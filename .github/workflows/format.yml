@@ -28,4 +28,4 @@ jobs:
           action: format
       - run: echo "Run Tests"
       - run: |
-          echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.remaining)) | map(add) | add"
+          echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.remaining)) | map(add) | add'
