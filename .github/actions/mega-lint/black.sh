@@ -7,7 +7,7 @@ source ${BASH_SOURCE%/*}/common.sh
 COMMAND=${1:-""}
 case "${COMMAND}" in
 check)
-    # install_pip_package black
+    install_pip_package black
     report $(
         black --check . 2>&1 |
             tail -1 |
@@ -19,7 +19,7 @@ check)
 
     ;;
 format)
-    # install_pip_package black
+    install_pip_package black
     report $(
         black . 2>&1 |
             tail -1 |
