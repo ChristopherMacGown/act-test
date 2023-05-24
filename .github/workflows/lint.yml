@@ -2,10 +2,18 @@ on:
   workflow_call:
 jobs:
   lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        linters:
+            - name: ruff
+              action: check
     runs-on: ubuntu-latest
     name: lint ${{ matrix.linters.name }}
     steps:
       - uses: actions/checkout@v3
-      - id: ruff
-        uses: ./.github/actions/linters/ruff
+      - uses: ./.github/actions/mega-lint
+        with:
+          linter: ${{ matrix.linters.name }}
+          action: ${{ matrix.linters.action }}
       - run: /bin/false

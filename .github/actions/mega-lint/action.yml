@@ -1,41 +1,30 @@
 name: lint-python
 description: Runs the specified linter against the local codebase.
 inputs:
-  type:
-    description: "The type of linter in question: Valid choices ['python', 'node']."
-    required: false
-    default: python
   linter:
-    description: The pypi package name for the requested linter.
+    description: The name of the requested linter.
     required: true
-  command:
-    description: The linter command line arguments
+  action:
+    description: Whether or not to automatically format with the specified linter.
     required: true
 outputs:
-  remaining:
-    description: Number of remaining fixes.
-    value: ${{ steps.remaining.outputs.remaining }}
+  report:
+    description: |
+      A JSON Object containing two keys "fixable" and "remaining" whose values
+      correspond to the number of lint violations that the linter considers
+      fixable, and the number of lints that would remain after fixed had been
+      applied to the local repository.
+    value: ${{ steps.run.outputs.report }}
 runs:
   using: composite
   steps:
     - uses: actions/checkout@v3
-    - if: ${{ inputs.type == 'node' }}
-      uses: actions/setup-node@v3
-      with:
+    - uses: actions/setup-node@v3
+      with: 
         node-version: 18.x
-    - if: ${{ inputs.type == 'node' }}
-      shell: bash
-      run: npm install ${{ inputs.linter }} && ${{ inputs.command }}
-    - if: ${{ inputs.type == 'python' }}
-      uses: actions/setup-python@v4
+    - uses: actions/setup-python@v4
       with:
         python-version: 3.11
-    - id: run-python-linter
-      if: ${{ inputs.type == 'python' }}
+    - id: run
       shell: bash
-      run: |
-        pip install ${{ inputs.linter }}
-        ${{ inputs.command }} >> $GITHUB_OUTPUT
-    - id: remaining
-      shell: bash
-      run: echo "remaining=${{ join(steps.*.outputs.remaining, '') }}" >> $GITHUB_OUTPUT
+      run: ${{ github.action_path }}/${{ inputs.linter }}.sh ${{ inputs.action }}>> $GITHUB_OUTPUT
