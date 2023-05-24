@@ -10,8 +10,9 @@ install_pip_package() {
 report() {
     local report=${@:-""}
     if [ -z "${report}" ]; then
-        exit -1
+        exit 0
     fi
 
-    echo -n "report=${report}" >>$GITHUB_OUTPUT
+    echo "report=${report}" >>$GITHUB_OUTPUT
+    exit 1
 }
