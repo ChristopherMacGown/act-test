@@ -28,4 +28,5 @@ jobs:
           action: format
       - run: echo "Run Tests"
       - run: |
-          echo "${{ fromJSON(steps.*.outputs.report ) }}"
+          echo "${{ fromJSON(steps.ruff.outputs.report ) }}"
+          echo "${{ fromJSON(steps.black.outputs.report ) }}"
