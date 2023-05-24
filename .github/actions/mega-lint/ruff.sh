@@ -10,9 +10,10 @@ check)
     install_pip_package ruff
     report $(
         ruff check --format=json . |
-            jq 'group_by(.fix | type) 
+            jq -S 'group_by(.fix | type) 
             | map({(if .[0].fix == null then "remaining" else "fixable" end ): length})
-            | add'
+            | add
+            | @json'
     )
     ;;
 format)
