@@ -4,7 +4,7 @@ install_pip_package() {
         exit -1
     fi
 
-    pip install -qqq --disable-pip-version-check ${package_name}
+    pip install --disable-pip-version-check ${package_name}
 }
 
 report() {

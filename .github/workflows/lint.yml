@@ -1,5 +1,6 @@
 on:
   workflow_call:
+  
 jobs:
   lint:
     strategy:
@@ -7,7 +8,7 @@ jobs:
       matrix:
         linters:
             - name: ruff
-              action: check
+            - name: black
     runs-on: ubuntu-latest
     name: lint ${{ matrix.linters.name }}
     steps:
@@ -15,5 +16,4 @@ jobs:
       - uses: ./.github/actions/mega-lint
         with:
           linter: ${{ matrix.linters.name }}
-          action: ${{ matrix.linters.action }}
-      - run: /bin/false
+          action: check
