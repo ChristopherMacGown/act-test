@@ -32,24 +32,10 @@ jobs:
       - run: echo "Run Tests"
       - id: results
         run: |
-          LINTERS_WITH_FIXES="";
-          if [ ${{ contains(steps.ruff.outputs.report, 'fixable') }} ]; then
-            LINTERS_WITH_FIXES+=" * ruff\n"
-          fi
-          if [ ${{ contains(steps.black.outputs.report, 'fixable') }} ]; then
-            LINTERS_WITH_FIXES+=" * black\n"
-          fi
+          REMAINING=0;
+          FIXABLE=0;
 
-          LINT_RESULT=$(
-            echo "${{ toJSON(steps.*.outputs.report) }}" |
-              jq 'map(fromjson | to_entries[]) 
-                    | group_by(.key) 
-                    | map({(.[0].key): length}) 
-                    | add'
-          )
-
-          REMAINING=$(echo $LINT_RESULT | jq '.remaining')
-          FIXABLE=$(echo $LINT_RESULT | jq '.fixable')
+          ${{ steps.ruff.outputs.report }}
 
           echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
           echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
