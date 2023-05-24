@@ -32,7 +32,8 @@ jobs:
       - run: echo "Run Tests"
       - id: results
         run: |
-          echo ruff -> ${{ contains(steps.ruff.outputs.report, 'fixable') }}
+          echo ruff -> ${{ contains(steps.ruff.outputs.report, 'fixable') && "  * ruff" }}
+          echo black -> ${{ contains(steps.black.outputs.report, 'fixable') && "  * black" }}
 
           LINT_RESULT=$(
             echo "${{ toJSON(steps.*.outputs.report) }}" |
