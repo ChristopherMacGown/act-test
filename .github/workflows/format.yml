@@ -45,7 +45,7 @@ jobs:
       - id: push-changes
         name: push changes
         run: |
-          echo ${{ steps.results.fixable >= 1 }}
+          echo ${{ steps.results.fixable }} -> ${{ steps.results.fixable >= 1 }}
           echo 'git config --global user.name "${{ inputs.committer-name }}"'
           echo 'git config --global user.email "${{ inputs.committer-email }}"'
       - id: fail-on-remaining
