@@ -19,6 +19,13 @@ jobs:
         with:
           linter: ruff
           action: format
+      - id: black
+        continue-on-error: true
+        name: format black
+        uses: ./.github/actions/mega-lint
+        with: 
+          linter: black
+          action: format
       - run: echo "Run Tests"
       - run: |
-          echo "${{ fromJSON(steps.ruff.outputs.report ) }}"
+          echo "${{ fromJSON(steps.*.outputs.report ) }}"
