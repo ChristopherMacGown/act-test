@@ -28,8 +28,7 @@ jobs:
           action: format
       - id: remainder
         run: |
-          echo ${{ steps.ruff.outputs.report }}
-          echo ${{ steps.black.outputs.report }}
+          echo "${{ steps.*.outputs.report }}" | jq -s 'select(.remaining) | length'
           echo remaining=10 >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - run: |
