@@ -4,8 +4,8 @@ install_pip_package() {
         exit -1
     fi
 
-    echo pip config set global.disable-pip-version-check true
-    echo pip install ${package_name}
+    pip config set global.disable-pip-version-check true
+    pip install ${package_name}
 }
 
 report() {
