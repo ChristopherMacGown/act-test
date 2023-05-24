@@ -28,7 +28,7 @@ jobs:
           action: format
       - id: remainder
         run: |
-          echo "${{ fromJSON(steps.*.outputs.report) }}" | jq 'select(.remaining) | length'
+          echo "${{ toJSON(steps.*.outputs.report) }}" 
           echo remaining=10 >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - run: |
