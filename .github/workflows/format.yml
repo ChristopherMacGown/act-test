@@ -55,10 +55,14 @@ jobs:
           git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
           git add -u
           git commit -F- <<EOF
-            ${{ inputs.commit-message-header}}
+          ${{ inputs.commit-message-header}}
 
-            Signed-off-by: ${{ inputs.committer-name }} <${{ inputs.committer-email }}>
+            * black
+            * ruff
+
+          Signed-off-by: ${{ inputs.committer-name }} <${{ inputs.committer-email }}>
           EOF
+          git push
 
       - id: fail-on-remaining
         if: ${{ steps.results.outputs.remaining >= 1 }}
