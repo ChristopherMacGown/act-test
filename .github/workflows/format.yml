@@ -44,10 +44,10 @@ jobs:
           echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
       - id: push-changes
         name: push changes
-        if: ${{ fromJSON(steps.results.fixable) > 1}}
+        if: ${{ steps.results.fixable >= 1 }}
         run: |
           echo 'git config --global user.name "${{ inputs.committer-name }}"'
           echo 'git config --global user.email "${{ inputs.committer-email }}"'
       - id: fail-on-remaining
-        if: ${{ fromJSON(steps.results.remaining) > 1 }}
+        if: ${{ steps.results.remaining >= 1 }}
         run: /bin/false
