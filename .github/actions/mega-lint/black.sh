@@ -28,6 +28,8 @@ format)
                 | select(. != null)
                 | @json'
     )
+
+    git status
     ;;
 *)
     echo -n "Usage: $0 [check|format]"
