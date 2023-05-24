@@ -28,4 +28,7 @@ jobs:
           action: format
       - run: echo "Run Tests"
       - run: |
-          echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.remaining)) | map(add) | add'
+          REMAINING=$(echo "${{ toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(.remaining)) | map(add) | add')
+          FIXED=$(echo "${{toJSON(steps.*.outputs.report) }}" | jq 'map(fromjson | select(!.remaining)) | map(add) | add') }}")
+
+          echo "stuff: ${FIXED} / ${REMAINING}"
