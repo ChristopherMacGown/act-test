@@ -37,11 +37,11 @@ runs:
               print(line, file=output)
             print("EOF", file=output)
 
-
-        ${{ inputs.task-outputs }}
-        ${{ inputs.task-collection-rules }}
-
-        #task_inputs = json.loads(${{ inputs.task-outputs }})
+        task_inputs = {task: json.loads(report[1:-1] or "{}") for task, report 
+                       in [
+                        line.split("=", 2) for line
+                        in """${{ inputs.task-outputs}}""".splitlines()
+                       ]}
         #task_collection_rules = json.loads(${{ inputs.task-collection-rules}})
         #task_collection_rules = {rule: eval(_lambda) for rule, _lambda
         #                         in task_collection_rules.items()
