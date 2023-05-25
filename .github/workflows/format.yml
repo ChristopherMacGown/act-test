@@ -40,13 +40,28 @@ jobs:
           EOF
           );
 
+
+          echo 'commit_message<<COMMIT' >> $GITHUB_OUTPUT
+          echo ${{ inputs.commit-message-header }} >> $GITHUB_OUTPUT
+          echo >> $GITHUB_OUTPUT
+          if [ -z "${{ steps.ruff.outputs.fixable }}"]; then
+            echo " * ruff" >> $GITHUB_OUTPUT
+          if
+          if [ -z "${{ steps.black.outputs.fixable }}"]; then
+            echo " * black" >> $GITHUB_OUTPUT
+          fi
+          echo >> $GITHUB_OUTPUT
+          echo 'COMMIT' >> $GITHUB_OUTPUT
+          
           echo fixable=$(echo ${FIXABLE} | jq 'add') >> $GITHUB_OUTPUT
           echo remaining=$(echo ${REMAINING} | jq 'add') >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - if: ${{ steps.prepare.outputs.fixable >= 1 }} 
-        run: |
-          echo "WOULD COMMIT"
-          echo "${{ steps.prepare.outputs.fixable }}"
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_user_name: ${{ inputs.committer-name }}
+          commit_user_email: ${{ inputs.committer-email }}
+          commit_message: ${{ steps.prepare.outputs.commit_message }}
       - if: ${{ steps.prepare.outputs.remaining >= 1 }}
         run: |
           echo "Failed with unfixable lint violations"
