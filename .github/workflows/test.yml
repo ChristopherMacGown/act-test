@@ -10,11 +10,11 @@ jobs:
           - name: "python"
             cache:
               path: .venv
-              hash-pattern: **/poetry.lock
+              hash-pattern: "**/poetry.lock"
           - name: "node"
             cache:
               path: .front-end/node_modules/
-              hash-pattern: **/yarn.lock
+              hash-pattern: "**/yarn.lock"
     name: ${{ matrix.suite.name }}
     steps:
       - uses: actions/checkout@v3
