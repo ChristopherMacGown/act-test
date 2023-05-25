@@ -31,8 +31,8 @@ jobs:
           action: format
       - id: prepare
         run: |
-          FIXABLE=$(sed -e 's/^,*/[/' -e 's/,,*/,/g' -e 's/,*$/]/' <<-EOF
-            ${{ join(steps.*.outputs.fixable) }}
+          FIXABLE=$(sed -e 's/^[[:space:]]*,*/[/' -e 's/,,*/,/g' -e 's/,*$/]/' <<-EOF
+          ${{ join(steps.*.outputs.fixable) }}
           EOF
           )
 
