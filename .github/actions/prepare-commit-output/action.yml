@@ -40,7 +40,10 @@ runs:
             print("EOF", file=output)
 
         def parse(inputs):
-          return [line.split("=", maxsplit=1) for line in inputs.splitlines()]
+          return [line.strip().split("=", maxsplit=1) 
+                  for line
+                  in inputs.splitlines()
+                  if line.strip()]
 
         task_inputs = {task: json.loads(report[1:-1] or "{}") for task, report 
                        in parse(
