@@ -30,6 +30,7 @@ jobs:
           linter: black
           action: format
       - run: echo "Run Tests"
-      - if: ${{ steps.*.outputs.fixable >= 1 }}
-        run: echo "WOULD COMMIT BACK CHANGES!"
+      - run: |
+          echo "WOULD COMMIT"
+          echo "${{ steps.*.outputs.fixable }}"
           
