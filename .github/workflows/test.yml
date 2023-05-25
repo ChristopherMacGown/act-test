@@ -18,7 +18,7 @@ jobs:
     name: ${{ matrix.suite.name }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./github/actions/test-runner
+      - uses: ./.github/actions/test-runner
         with:
           suite: ${{ matrix.suite.name }}
           cache-path: ${{ matrix.suite.cache.path }}
