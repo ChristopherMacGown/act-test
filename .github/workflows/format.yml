@@ -32,5 +32,7 @@ jobs:
       - run: echo "Run Tests"
       - run: |
           echo "WOULD COMMIT"
+          echo "${{ steps.ruff.outputs.fixable }}"
+          echo "${{ steps.black.outputs.fixable }}"
           echo "${{ toJSON(steps.*.outputs.fixable) }}"
           
