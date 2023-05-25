@@ -10,7 +10,7 @@ jobs:
             - name: ruff
             - name: black
     runs-on: ubuntu-latest
-    name: lint ${{ matrix.linters.name }}
+    name: ${{ matrix.linters.name }}
     steps:
       - uses: actions/checkout@v3
       - id: lint

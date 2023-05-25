@@ -50,3 +50,5 @@ jobs:
           commit_user_name: ${{ inputs.committer-name }}
           commit_user_email: ${{ inputs.committer-email }}
           commit_message: ${{ steps.prepare.outputs.commit-message }}
+      - if: ${{ steps.prepare.outputs.changes >= 1 }}
+        run: /bin/false
