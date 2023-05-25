@@ -40,7 +40,7 @@ jobs:
             linters-with-fixes=lambda *a, **k: k.get("remaining", 0) >= 1
       - id: push-changes
         name: push changes
-        if: ${{ steps.results.outputs.fixable >= 1 }}
+        if: ${{ steps.prepare-result.outputs.fixable >= 1 }}
         run: |
           LINTERS_WITH_CHANGES=$(
             echo ${{ steps.results.outputs.linters-with-fixes }} |
