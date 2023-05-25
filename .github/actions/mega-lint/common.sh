@@ -13,10 +13,14 @@ report() {
         exit 0
     fi
 
-    for output in $(echo "${report}" | jq 'fromjson 
+    REPORTS=$(
+        echo "${report}" | jq 'fromjson 
                             | to_entries
                             | map("\(.key)=\(.value)")
-                            | join("\n")'); do
+                            | join("\n")'
+    )
+
+    for output in ${REPORTS}; do
         echo ${output} >>$GITHUB_OUTPUT
         echo ${output}
     done
