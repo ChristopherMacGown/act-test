@@ -13,7 +13,7 @@ report() {
         exit 0
     fi
 
-    echo "${report}" | jq 'from_json 
+    echo "${report}" | jq 'fromjson 
                             | to_entries
                             | map("\(.key)=\(.value)")
                             | join("\n")' >>$GITHUB_OUTPUT
