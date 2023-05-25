@@ -16,6 +16,11 @@ report() {
     echo "${report}" | jq 'fromjson 
                             | to_entries
                             | map("\(.key)=\(.value)")
-                            | join("\n")' >>$GITHUB_OUTPUT
+                            | join("\n")'
+
+    echo "${report}" | jq 'fromjson 
+                        | to_entries
+                        | map("\(.key)=\(.value)")
+                        | join("\n")' >>$GITHUB_OUTPUT
     exit 1
 }
