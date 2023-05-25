@@ -1,4 +1,5 @@
 import bar
+
 import foo
 
 (
