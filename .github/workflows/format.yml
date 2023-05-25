@@ -30,9 +30,6 @@ jobs:
           linter: black
           action: format
       - run: echo "Run Tests"
-      - run: |
+      - if: ${{ steps.*.outputs.fixable >= 1 }}
+        run: |
           echo "WOULD COMMIT"
-          echo "${{ steps.ruff.outputs.fixable }}"
-          echo "${{ steps.black.outputs.fixable }}"
-          echo "${{ toJSON(steps.*.outputs.fixable) }}"
-          
