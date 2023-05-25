@@ -24,6 +24,7 @@ runs:
       run: |
         import collections
         import json
+        import os
 
         def dict_output(**kwargs):
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
