@@ -39,7 +39,7 @@ runs:
             print("EOF", file=output)
 
         def parse(inputs):
-          return [line.split("=", 2) for line in inputs]
+          return [line.split("=", 2) for line in inputs.splitlines()]
 
         task_inputs = {task: json.loads(report[1:-1] or "{}") for task, report 
                        in parse("""${{ inputs.task-outputs}}""")}
