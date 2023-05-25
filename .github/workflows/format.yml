@@ -44,6 +44,8 @@ jobs:
           echo fixable=$(echo ${FIXABLE} | jq 'add') >> $GITHUB_OUTPUT
           echo remaining=$(echo ${REMAINING} | jq 'add') >> $GITHUB_OUTPUT
           echo 'commit-message<<EOF' >> $GITHUB_OUTPUT
+          echo '${{ inputs.commit-message-header }}' >> $GITHUB_OUTPUT
+          echo >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
       - if: ${{ steps.prepare.outputs.fixable >= 1 }} 
