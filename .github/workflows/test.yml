@@ -10,15 +10,16 @@ jobs:
           - name: "python"
             cache:
               path: .venv
-              key: poetry-${{ hashFiles('**/poetry.lock') }}-${{ env.pythonLocation }}
+              hash-pattern: "**/poetry.lock"
           - name: "node"
             cache:
               path: .front-end/node_modules/
-              key: yarn-${{ hashFiles('**/yarn.lock') }}
+              hash-pattern: "**/yarn.lock"
     name: ${{ matrix.suite }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./github/actions/test-runner
         with:
           suite: ${{ matrix.suite.name }}
-          cache: ${{ matrix.suite.cache-path }}
+          cache-path: ${{ matrix.suite.cache.path }}
+          cache-hash-pattern: ${{ matrix.suite.cache.hash-pattern }}
