@@ -34,11 +34,21 @@ jobs:
           FIXABLE=$(sed -e 's/^[[:space:]]*,*/[/' -e 's/,,*/,/g' -e 's/,*$/]/' <<-EOF
           ${{ join(steps.*.outputs.fixable) }}
           EOF
-          )
+          );
+          REMAINING=$(sed -e 's/^[[:space:]]*,*/[/' -e 's/,,*/,/g' -e 's/,*$/]/' <<-EOF
+          ${{ join(steps.*.outputs.remaining) }}
+          EOF
+          );
 
           echo fixable=$(echo ${FIXABLE} | jq 'add') >> $GITHUB_OUTPUT
+          echo remaining=$(echo ${REMAINING} | jq 'add') >> $GITHUB_OUTPUT
       - run: echo "Run Tests"
-      -  run: |
+      - if: ${{ steps.prepare.outputs.fixable >= 1 }} 
+        run: |
           echo "WOULD COMMIT"
           echo "${{ steps.prepare.outputs.fixable }}"
+      - if: ${{ steps.prepare.outputs.remaining >= 1 }}
+        run: |
+          echo "Failed with unfixable lint violations"
+          /bin/false
 
