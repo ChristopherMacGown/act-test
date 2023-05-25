@@ -12,5 +12,5 @@ def foo(bar: None):
 
 
 if __name__ == "__main__":
-    bar.baz
-    print(foo(None))
+        bar.baz
+        print(foo(None))
