@@ -13,6 +13,6 @@ report() {
         exit 0
     fi
 
-    echo "report=${report}" >>$GITHUB_OUTPUT
+    echo "${report}" | jq 'to_entries | map("\(.key)=\(.value)") | join("\n")' >>$GITHUB_OUTPUT
     exit 1
 }

@@ -8,17 +8,15 @@ inputs:
     description: Whether or not to automatically format with the specified linter.
     required: true
 outputs:
-  report:
-    description: |
-      A JSON Object containing two keys "fixable" and "remaining" whose values
-      correspond to the number of lint violations that the linter considers
-      fixable, and the number of lints that would remain after fixed had been
-      applied to the local repository.
-    value: ${{ steps.run.outputs.report }}
+  fixable:
+    description: The number of lints the linter can fix.
+    value: ${{ steps.run.outputs.fixable }}
+  remaining:
+    description: The number of lints the linter cannot fixable.
+    value: ${{ steps.run.outputs.remaining }}
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with: 
         node-version: 18.x

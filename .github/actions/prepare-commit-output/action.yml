@@ -1,6 +1,9 @@
 name: prepare-commit-output
 description: walks a series of input steps 
 inputs:
+  commit-message-header:
+    description: The header for the commit message used in the next step.
+    default: Automatic update with format changes from linters.
   task-outputs:
     description: |
       A JSON Object whose keys are the names of task steps and whose values are
@@ -11,11 +14,20 @@ inputs:
       A JSON Object whose keys are the name of a rule (and therefore the output
       key for GITHUB_OUTPUT) and whose values are python lambdas describing how
       to collect tasks who you're interested in.
-    required: true      
+    required: true   
+outputs:
+  fixable:
+    description: The number of fixable lints
+    value: ${{ steps.format.fixable }}
+  remaining:
+    description: The number of remaining lints.
+    value: ${{ steps.format.remaining }}
+  commit-message:
+    description: The git commit message
+    value: ${{ steps.format.commit-message }}
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
         python-version: 3.11
@@ -64,4 +76,8 @@ runs:
           report.update(collections.Counter(task_report))
         
         dict_output(**report)
+        multiline_output("commit-message",
+        f"""${{ inputs.commit-message-header }}
+        """
+        )
         dict_output(**collected_tasks)

@@ -30,36 +30,6 @@ jobs:
           linter: black
           action: format
       - run: echo "Run Tests"
-      - id: prepare-result
-        uses: ./.github/actions/prepare-commit-output
-        with:
-          task-outputs: |-
-            ruff=${{ steps.ruff.outputs.report }}
-            black=${{ steps.black.outputs.report }}
-          task-collection-rules: |-
-            linters-with-fixes=lambda *a, **k: k.get("remaining", 0) >= 1
-      - id: push-changes
-        name: push changes
-        if: ${{ steps.prepare-result.outputs.fixable >= 1 }}
-        run: |
-          LINTERS_WITH_CHANGES=$(
-            echo ${{ steps.results.outputs.linters-with-fixes }} |
-              jq 'map("  * \(.)")'
-          )
-          git config --global user.name "${{ inputs.committer-name }}"
-          git config --global user.email "${{ inputs.committer-email }}"
-          git status
-          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
-          git add -u
-          git commit -F- <<EOF
-          ${{ inputs.commit-message-header}}
-
-          ${ LINTERS_WITH_CHANGES }
-
-          Signed-off-by: ${{ inputs.committer-name }} <${{ inputs.committer-email }}>
-          EOF
-          git push
-
-      - id: fail-on-remaining
-        if: ${{ steps.results.outputs.remaining >= 1 }}
-        run: /bin/false
+      - if: ${{ steps.*.outputs.fixable >= 1 }}
+        run: echo "WOULD COMMIT BACK CHANGES!"
+          
