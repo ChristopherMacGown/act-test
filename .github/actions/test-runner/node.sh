@@ -3,4 +3,4 @@
 set -euxo pipefail
 
 yarn --cwd front-end test:unit
-yarn --cwd build
+yarn --cwd front-end build
