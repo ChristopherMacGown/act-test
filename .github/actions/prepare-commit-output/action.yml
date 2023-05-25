@@ -48,7 +48,7 @@ runs:
                                  if _lambda.startswith("lambda ") 
                                 }
         report = collections.Counter({})
-        collected_tasks = collections.defaultDict(list)
+        collected_tasks = collections.defaultdict(list)
         for task, task_report in task_inputs.keys():
           for rule, _lambda in task_collection_rules.items():
             if _lambda(task_report):
