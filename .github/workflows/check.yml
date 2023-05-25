@@ -7,8 +7,8 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
   format:
-    needs: [lint]
-    if: ${{ failure('lint') }}
+    needs: [lint, test]
+    if: ${{ failure('lint') && !failure('test') }}
     uses: ./.github/workflows/format.yml
     secrets: inherit
     permissions:
