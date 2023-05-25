@@ -49,7 +49,7 @@ runs:
                                 }
         report = collections.Counter({})
         collected_tasks = collections.defaultdict(list)
-        for task, task_report in task_inputs.keys():
+        for task, task_report in task_inputs.items():
           for rule, _lambda in task_collection_rules.items():
             if _lambda(task_report):
               collected_tasks[rule].append(task)
