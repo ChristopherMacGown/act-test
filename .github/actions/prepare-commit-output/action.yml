@@ -43,9 +43,13 @@ runs:
           return [line.split("=", maxsplit=1) for line in inputs.splitlines()]
 
         task_inputs = {task: json.loads(report[1:-1] or "{}") for task, report 
-                       in parse("""${{ inputs.task-outputs}}""")}
+                       in parse(
+                        """${{ inputs.task-outputs}}
+                        """)}
         task_collection_rules = {rule: eval(_lambda) for rule, _lambda
-                                 in parse("""${{ inputs.task-collection-rules }}""")
+                                 in parse(
+                                  """${{ inputs.task-collection-rules }}
+                                  """)
                                  if _lambda.startswith("lambda ") 
                                 }
         report = collections.Counter({})
