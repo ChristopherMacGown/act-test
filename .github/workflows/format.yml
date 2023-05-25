@@ -34,22 +34,10 @@ jobs:
         uses: ./.github/actions/prepare-commit-output
         with:
           task-outputs: |-
-            ${{
-              toJSON(
-                {
-                  "ruff": ${{ steps.ruff.outputs.report }}
-                  "black": ${{ steps.black.outputs.report }}
-                }
-              )
-            }}
+            ruff=${{ steps.ruff.outputs.report }}
+            black=${{ steps.black.outputs.report }}
           task-collection-rules: |-
-            ${{
-              toJSON(
-                {
-                  "linters-with-fixes": "lambda *a, **k: k.get('remaining', 0) > 1
-                }
-              )
-            }}
+            linters-with-fixes=lambda *a **k: k.get("remaining", 0) > 1
       - id: push-changes
         name: push changes
         if: ${{ steps.results.outputs.fixable >= 1 }}

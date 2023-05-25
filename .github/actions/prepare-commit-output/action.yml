@@ -37,19 +37,23 @@ runs:
               print(line, file=output)
             print("EOF", file=output)
 
-        task_inputs = json.loads(${{ inputs.task-outputs }})
-        task_collection_rules = json.loads(${{ inputs.task-collection-rules}})
-        task_collection_rules = {rule: eval(_lambda) for rule, _lambda
-                                 in task_collection_rules.items()
-                                 if _lambda.startswith("lambda ")}
 
-        report = collections.Counter({})
-        collected_tasks = collections.defaultDict(list)
-        for task, task_report in task_inputs.keys():
-          for rule, _lambda in task_collection_rules.items():
-            if _lambda(task_report):
-              collected_tasks[rule].append(task)
-          report.update(collections.Counter(task_report))
+        ${{ inputs.task-outputs }}
+        ${{ inputs.task-collection-rules }}
 
-        dict_output(**report)
-        dict_output(**collected_tasks)
+        #task_inputs = json.loads(${{ inputs.task-outputs }})
+        #task_collection_rules = json.loads(${{ inputs.task-collection-rules}})
+        #task_collection_rules = {rule: eval(_lambda) for rule, _lambda
+        #                         in task_collection_rules.items()
+        #                         if _lambda.startswith("lambda ")}
+        #
+        #report = collections.Counter({})
+        #collected_tasks = collections.defaultDict(list)
+        #for task, task_report in task_inputs.keys():
+        #  for rule, _lambda in task_collection_rules.items():
+        #    if _lambda(task_report):
+        #      collected_tasks[rule].append(task)
+        #  report.update(collections.Counter(task_report))
+        #
+        #dict_output(**report)
+        #dict_output(**collected_tasks)
