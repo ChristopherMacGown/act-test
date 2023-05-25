@@ -41,17 +41,17 @@ jobs:
           );
 
 
-          echo 'commit_message<<COMMIT' >> $GITHUB_OUTPUT
+          echo 'commit_message<<EOF' >> $GITHUB_OUTPUT
           echo ${{ inputs.commit-message-header }} >> $GITHUB_OUTPUT
-          echo >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
           if [ -z "${{ steps.ruff.outputs.fixable }}"]; then
-            echo " * ruff" >> $GITHUB_OUTPUT
+            echo "  * ruff" >> $GITHUB_OUTPUT
           if
           if [ -z "${{ steps.black.outputs.fixable }}"]; then
-            echo " * black" >> $GITHUB_OUTPUT
+            echo "  * black" >> $GITHUB_OUTPUT
           fi
-          echo >> $GITHUB_OUTPUT
-          echo 'COMMIT' >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
           
           echo fixable=$(echo ${FIXABLE} | jq 'add') >> $GITHUB_OUTPUT
           echo remaining=$(echo ${REMAINING} | jq 'add') >> $GITHUB_OUTPUT
