@@ -2,7 +2,6 @@ on:
   - push
 jobs:
   test:
-    if: ${{ 1 == 2 }}
     uses: ./.github/workflows/test.yml
   lint:
     uses: ./.github/workflows/lint.yml
