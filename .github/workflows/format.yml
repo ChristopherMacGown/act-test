@@ -40,5 +40,5 @@ jobs:
       - run: echo "Run Tests"
       -  run: |
           echo "WOULD COMMIT"
-          echo "${{ steps.prepare.outputs.fixable >= 1 }}"
+          echo "${{ steps.prepare.outputs.fixable }}"
 
