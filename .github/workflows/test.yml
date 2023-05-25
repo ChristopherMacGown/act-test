@@ -1,15 +1,24 @@
 on:  
   workflow_call:
+    
 jobs:
-  test-python:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v3
-     - uses: snok/install-poetry@v1
-     - uses: actions/cache@v3
-       id: cache
-       with:
-         path: .venv/
-         key: poetry-${{ hashFiles('**/poetry.lock') }}-${{ env.pythonLocation }}
-         restore-keys: |
-           poetry-${{ hashFiles('**/poetry.lock') }}-${{ env.pythonLocation }}
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        suite: 
+          - name: "python"
+            cache:
+              path: .venv
+              key: poetry-${{ hashFiles('**/poetry.lock') }}-${{ env.pythonLocation }}
+          - name: "node"
+            cache:
+              path: .front-end/node_modules/
+              key: yarn-${{ hashFiles('**/yarn.lock') }}
+    name: ${{ matrix.suite }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./github/actions/test-runner
+        with:
+          suite: ${{ matrix.suite.name }}
+          cache: ${{ matrix.suite.cache-path }}
