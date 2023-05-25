@@ -34,8 +34,8 @@ jobs:
         uses: ./.github/actions/prepare-commit-output
         with:
           task-outputs: |-
-            ruff=${{ steps.ruff.outputs.report }}
-            black=${{ steps.black.outputs.report }}
+            ruff=${{ toJSON(${{ steps.ruff.outputs.report }}) }}
+            black=${{ toJSON(${{ steps.black.outputs.report }}) }}
           task-collection-rules: |-
             linters-with-fixes=lambda *a **k: k.get("remaining", 0) > 1
       - id: push-changes
