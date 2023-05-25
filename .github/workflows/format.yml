@@ -35,7 +35,7 @@ jobs:
         with:
           task-outputs: |-
             ruff=${{ fromJSON( steps.ruff.outputs.report ) }}
-            black=${{ fromSON( steps.black.outputs.report ) }}
+            black=${{ fromJSON( steps.black.outputs.report ) }}
           task-collection-rules: |-
             linters-with-fixes=lambda *a **k: k.get("remaining", 0) > 1
       - id: push-changes
