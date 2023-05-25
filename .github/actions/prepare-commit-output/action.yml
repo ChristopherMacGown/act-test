@@ -37,11 +37,15 @@ runs:
               print(line, file=output)
             print("EOF", file=output)
 
+        def parse(inputs):
+          return [line.split("=", 2) for line in inputs]
+
         task_inputs = {task: json.loads(report[1:-1] or "{}") for task, report 
-                       in [
-                        line.split("=", 2) for line
-                        in """${{ inputs.task-outputs}}""".splitlines()
-                       ]}
+                       in parse("""${{ inputs.task-outputs}}""")}
+        task_collection_rules = {rule: eval(_lambda) for rule, _lambda
+                                 in parse("""${inputs.task-collection-rules}""")
+                                 if _lambda.startswith("lambda ") 
+                                }
         #task_collection_rules = json.loads(${{ inputs.task-collection-rules}})
         #task_collection_rules = {rule: eval(_lambda) for rule, _lambda
         #                         in task_collection_rules.items()
