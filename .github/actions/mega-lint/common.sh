@@ -20,6 +20,8 @@ report() {
                             | join("\n")'
     )
 
+    echo "WTF: ${GITHUB_OUTPUT}"
+
     for output in ${REPORTS}; do
         echo ${output} >>$GITHUB_OUTPUT
         echo ${output}
