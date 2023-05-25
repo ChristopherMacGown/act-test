@@ -25,7 +25,7 @@ runs:
         import collections
         import json
 
-        def dict_output(key, **kwargs):
+        def dict_output(**kwargs):
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
             for key, value in kwargs.items():
               print(f"{key}={value}")
