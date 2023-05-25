@@ -29,6 +29,8 @@ jobs:
         with: 
           linter: black
           action: format
+      - id: prepare
+        run: fixable=$( echo "${{ toJSON(steps.*.outputs.fixable )}}" | jq 'fromjson | add' 
       - run: echo "Run Tests"
       -  run: |
           echo "WOULD COMMIT"
