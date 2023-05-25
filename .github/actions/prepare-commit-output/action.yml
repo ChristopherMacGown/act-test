@@ -1,0 +1,55 @@
+name: prepare-commit-output
+description: walks a series of input steps 
+inputs:
+  task-outputs:
+    description: |
+      A JSON Object whose keys are the names of task steps and whose values are
+      json objects with data
+    required: true
+  task-collection-rules:
+    description: |
+      A JSON Object whose keys are the name of a rule (and therefore the output
+      key for GITHUB_OUTPUT) and whose values are python lambdas describing how
+      to collect tasks who you're interested in.
+    required: true      
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    - id: format
+      shell: python
+      run: |
+        import collections
+        import json
+
+        def dict_output(key, **kwargs):
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+            for key, value in kwargs.items():
+              print(f"{key}={value}", file=output)
+
+        def multiline_output(key, lines):
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+            print("COMMIT_MESSAGE<<EOF", file=output)
+            for line in lines:
+              print(line, file=output)
+            print("EOF", file=output)
+
+        task_inputs = json.loads(${{ inputs.task-outputs }})
+        task_collection_rules = json.loads(${{ inputs.task-collection-rules}})
+        task_collection_rules = {rule: eval(_lambda) for rule, _lambda
+                                 in task_collection_rules.items()
+                                 if _lambda.startswith("lambda ")}
+
+        report = collections.Counter({})
+        collected_tasks = collections.defaultDict(list)
+        for task, task_report in task_inputs.keys():
+          for rule, _lambda in task_collection_rules.items():
+            if _lambda(task_report):
+              collected_tasks[rule].append(task)
+          report.update(collections.Counter(task_report))
+
+        dict_output(**report)
+        dict_output(**collected_tasks)

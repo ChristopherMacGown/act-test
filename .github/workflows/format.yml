@@ -30,18 +30,26 @@ jobs:
           linter: black
           action: format
       - run: echo "Run Tests"
-      - id: results
-        run: |
-          REMAINING=0;
-          FIXABLE=0;
-
-          for report in ${{ toJSON(steps.*.outputs.report) }}; do
-            echo "$report"
-          fi
-
-          echo "remaining=${REMAINING}" >> $GITHUB_OUTPUT
-          echo "fixable=${FIXABLE}" >> $GITHUB_OUTPUT
-          echo "linters-with-fixes=${LINTERS_WITH_FIXES}" >> $GITHUB_OUTPUT
+      - id: prepare-result
+        uses: ./.github/actions/prepare-commit-output
+        with:
+          task-outputs: |-
+            ${{
+              toJSON(
+                {
+                  "ruff": ${{ steps.ruff.outputs.report }}
+                  "black": ${{ steps.black.outputs.report }}
+                }
+              )
+            }}
+          task-collection-rules: |-
+            ${{
+              toJSON(
+                {
+                  "linters-with-fixes": "lambda *a, **k: k.get('remaining', 0) > 1
+                }
+              )
+            }}
       - id: push-changes
         name: push changes
         if: ${{ steps.results.outputs.fixable >= 1 }}
