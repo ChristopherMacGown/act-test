@@ -19,12 +19,8 @@ runs:
     - uses: actions/cache@v3
       with:
         path: ${{ inputs.cache-path }}
-        key: ${{ inputs.suite }}-${{ hashFiles( inputs.cache-hash-pattern ) }}
-        restore-keys: ${{ inputs.suite }}-${{ hashFiles( inputs.cache-hash-pattern ) }}
-    - shell: bash
-      run: |
-        pwd
-        ls -alh
+        key: ${{ inputs.suite }}-${{ hashFiles( ${{ inputs.cache-hash-pattern }} ) }}
+        restore-keys: ${{ inputs.suite }}-${{ hashFiles( ${{ inputs.cache-hash-pattern }} ) }}
     - if: ${{ inputs.suite == 'python' }}
       uses: actions/setup-python@v4
       with:
