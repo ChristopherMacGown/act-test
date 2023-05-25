@@ -15,7 +15,7 @@ jobs:
             cache:
               path: .front-end/node_modules/
               hash-pattern: "**/yarn.lock"
-    name: ${{ matrix.suite }}
+    name: ${{ matrix.suite.name }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./github/actions/test-runner
