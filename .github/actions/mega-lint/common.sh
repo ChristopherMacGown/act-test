@@ -14,17 +14,14 @@ report() {
     fi
 
     REPORTS=$(
-        echo "${report}" | jq 'fromjson 
+        echo "${report}" | jq -r 'fromjson 
                             | to_entries
                             | map("\(.key)=\(.value)")
                             | join("\n")'
     )
 
-    echo "WTF: ${GITHUB_OUTPUT}"
-
     for output in ${REPORTS}; do
         echo ${output} >>$GITHUB_OUTPUT
-        echo ${output}
     done
     exit 1
 }
