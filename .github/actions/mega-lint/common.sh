@@ -13,7 +13,9 @@ report() {
         exit 0
     fi
 
-    echo "WTF"
-    echo "${report}" | jq 'to_entries | map("\(.key)=\(.value)") | join("\n")' >>$GITHUB_OUTPUT
+    echo "${report}" | jq 'from_json 
+                            | to_entries
+                            | map("\(.key)=\(.value)")
+                            | join("\n")' >>$GITHUB_OUTPUT
     exit 1
 }
