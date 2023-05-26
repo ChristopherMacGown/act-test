@@ -31,7 +31,7 @@ jobs:
       - run: |
           echo "BUILD: ${{ matrix.artifact }}"
   publish:
-    needs: ["build"]
+    needs: [front-end, docker]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
