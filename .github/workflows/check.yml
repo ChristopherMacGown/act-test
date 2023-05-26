@@ -18,6 +18,10 @@ jobs:
     if:  ${{ always() && !failure('lint') && !failure('test') }}
     uses: ./.github/workflows/build.yml
     needs: [format]
+    with:
+      environment: production
+      latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_number) }}
+      docker-base-image: builder
   deploy:
     runs-on: ubuntu-latest
     needs: [build]

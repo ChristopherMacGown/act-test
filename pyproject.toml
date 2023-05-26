@@ -12,7 +12,6 @@ version = "0.1.0"
 description = ""
 authors = ["Christopher MacGown <chris@macgown.com>"]
 readme = "README.md"
-packages = [{include = "act_test"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
