@@ -20,6 +20,12 @@ jobs:
     if:  ${{ always() && !failure('lint') && !failure('test') }}
     steps:
       - run: echo "BUILD"
+  publish:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: ${{ always() && success('build') }}
+    steps:
+      - run: echo "PUBLISH"
   deploy:
     runs-on: ubuntu-latest
     needs: [build]
