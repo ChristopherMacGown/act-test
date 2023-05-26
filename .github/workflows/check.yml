@@ -22,6 +22,7 @@ jobs:
       environment: production
       latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_number) }}
       docker-base-image: builder
+      docker-namespace: oreburgh
   deploy:
     runs-on: ubuntu-latest
     needs: [build]
