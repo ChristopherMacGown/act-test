@@ -33,11 +33,6 @@ jobs:
   publish:
     needs: [front-end, docker]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        artifact: ["api", "bit-runner", "task-scheduler", "front-end"] 
-    name: ${{ matrix.artifact }}
     steps:
       - run: |
           echo "PUBLISH: ${{ matrix.artifact }}"
