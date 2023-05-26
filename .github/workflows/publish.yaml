@@ -1,0 +1,11 @@
+name: publish
+on: 
+  workflow_call:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        artifacts: ["api", "front-end"]
+           

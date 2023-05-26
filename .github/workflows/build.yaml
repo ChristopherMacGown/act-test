@@ -1,0 +1,18 @@
+name: build
+on: 
+  workflow_call:
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Prepare"
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+       artifacts: ["api", "bit-runner", "task-scheduler", "front-end"] 
+    name: ${{ matrix.artifact}}
+    steps:
+      - run: echo ${{ matrix.artifact }}
+      
