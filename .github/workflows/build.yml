@@ -2,18 +2,31 @@ name: build
 on: 
   workflow_call:
 jobs:
+  front-end:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: front-end/
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+          dir: front-end/
   prepare:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Prepare"
-  build:
+  docker:
     needs: [prepare]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-       artifacts: ["api", "bit-runner", "task-scheduler", "front-end"] 
-    name: ${{ matrix.artifact}}
+       artifact: ["api", "bit-runner", "task-scheduler"]
+    name: ${{ matrix.artifact }}
     steps:
       - run: |
           echo "BUILD: ${{ matrix.artifact }}"
@@ -23,7 +36,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-       artifacts: ["api", "bit-runner", "task-scheduler", "front-end"] 
+        artifact: ["api", "bit-runner", "task-scheduler", "front-end"] 
+    name: ${{ matrix.artifact }}
     steps:
       - run: |
           echo "PUBLISH: ${{ matrix.artifact }}"
