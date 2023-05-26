@@ -14,17 +14,13 @@ jobs:
     secrets: inherit
     permissions:
       contents: write
-  build:
+  build-and-publish:
     if:  ${{ always() && !failure('lint') && !failure('test') }}
     uses: ./.github/workflows/build.yml
     needs: [format]
-  publish:
-    if: ${{ always() && success('build') }}
-    uses: ./.github/workflows/publish.yml
-    needs: [build]
   deploy:
     runs-on: ubuntu-latest
-    needs: [publish]
-    if: ${{ always() && success('publish') && github.branch == 'main' }}
+    needs: [build-and-publish]
+    if: ${{ always() && success() && github.branch == 'main' }}
     steps:
       - run: echo "DEPLOY"

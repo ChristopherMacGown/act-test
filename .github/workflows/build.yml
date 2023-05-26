@@ -15,5 +15,17 @@ jobs:
        artifacts: ["api", "bit-runner", "task-scheduler", "front-end"] 
     name: ${{ matrix.artifact}}
     steps:
-      - run: echo ${{ matrix.artifact }}
-      
+      - run: |
+          echo "BUILD: ${{ matrix.artifact }}"
+  publish:
+    needs: ["build"]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+       artifacts: ["api", "bit-runner", "task-scheduler", "front-end"] 
+    steps:
+      - run: |
+          echo "PUBLISH: ${{ matrix.artifact }}"
+    
+  
