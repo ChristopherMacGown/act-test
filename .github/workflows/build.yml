@@ -31,7 +31,7 @@ jobs:
           cache-to: type=gha,mode=max
       - run: echo "Prepare"
   docker:
-    needs: [prepare]
+    needs: [base-images]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
