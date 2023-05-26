@@ -18,7 +18,7 @@ on:
         required: true
       version:
         type: string
-        default: 1.0
+        default: "1.0"
 
 jobs:
   front-end:
