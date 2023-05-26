@@ -66,7 +66,7 @@ jobs:
           IMAGE="${{ inputs.docker-registry }}/${{ inputs.docker-namespace }}/${{ matrix.artifact }}"
           echo 'tags=<<EOF' >> $GITHUB_OUTPUT
           echo "${IMAGE}:${{ inputs.latest-tag}}" >> $GITHUB_OUTPUT
-          echo "${IMAGE}:${{ inputs.version }}.${{ github.run_number }}-${{ inputs.environment }}
+          echo "${IMAGE}:${{ inputs.version }}.${{ github.run_number }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
           echo 'EOF'
       - uses: docker/build-push-action@v3
         with:
