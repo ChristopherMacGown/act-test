@@ -21,3 +21,10 @@ RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends postgresql-client
 RUN poetry install --no-dev
+
+
+FROM builder as api
+
+FROM builder as bit-runner
+
+FROM builder as task-scheduler
