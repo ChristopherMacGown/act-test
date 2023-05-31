@@ -14,10 +14,22 @@ jobs:
     secrets: inherit
     permissions:
       contents: write
-  build:
+  front-end:
+    if: ${{ always() && !failure('lint') && !failure('test') }}
+    needs: [format]
+    uses: ./.github/workflows/build-front-end.yml
+    with:
+      distribution: EV2TEW5MOCZE
+      origin-id: app.drill.run-production
+      origin-domains: |
+        blue=app.drill.run-production-blue.s3.us-west-2.amazonaws.com
+        green=app.drill.run-production-green.s3.us-west-2.amazonaws.com
+  images:
+    if: ${{ always() && !failure('lint') && !failure('test') }}
+    needs: [format]
+    uses: ./.github/workflows/build-docker-images.yml
     if:  ${{ always() && !failure('lint') && !failure('test') }}
     uses: ./.github/workflows/build.yml
-    needs: [format]
     with:
       origin-id: app.drill.run-production
       buckets: |

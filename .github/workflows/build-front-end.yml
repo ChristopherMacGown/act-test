@@ -1,0 +1,48 @@
+on:
+  workflow_call:
+    inputs:
+      distribution:
+        type: string
+        description: The ID of the CloudFront distribution.
+        required: true
+      origin-id:
+        type: string
+        description: The ID of the Blue/Green Origin
+      origin-domains:
+        type: string
+        description: |
+          A multi-line string containing the URIs of the Origin DomainNames
+          corresponding to the green or blue state of the distribution.
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          DISTRIBUTION_QUERY=$(cat <<- EOF
+            Distribution.{
+              Status: Status,
+              BlueGreenOrigin: DistributionConfig.
+                Origins.
+                  Items[?Id==\`${{ inputs.origin-id }}\`][0]
+            }
+          EOF
+          );
+
+          DISTRIBUTION=$(
+            aws cloudfront 
+            get-distribution --id "${{ inputs.distribution }}"
+            --query "${ DISTRIBUTION_QUERY }"
+          )
+
+          DISTRIBUTION_STATUS=$(echo "${DISTRIBUTION}" | jq '.Status')
+          DISTRIBUTION_ORIGIN=$(echo "${DISTRIBUTION}" | jq '.BlueGreenOrigin')
+          DISTRIBUTION_BLUE_GREEN_STATUS=$(echo "${{ inputs.origin-domains }} | grep "${DISTRIBUTION_ORIGIN}" )
+
+          echo "status=${DISTRIBUTION_STATUS}"
+          echo "blue-green-state=${DISTRIBUTION_BLUE_GREEN_STATUS}"
+
+
+
+
+
+
