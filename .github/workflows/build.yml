@@ -25,6 +25,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::391739045280:role/Github-CI+CD-Deployment-Role
+          aws-region: us-west-2
+      - id: determine-distribution-state
+        run: |
+          DISTRIBUTION_QUERY=$(cat <<- EOF 
+            DistributionList.Items[].{
+              Id: Id,
+              Staging: Staging,
+              Status: Status,
+              Origins: Origins.Items[].{
+                Id: Id,
+                DomainName: DomainName
+              }
+            }[?contains(Origins[].Id, \`app.drill.run-production\`) == \`true\`]
+            EOF
+          )
+          aws cloudfront list-distributions --query="${DISTRIBUTION_QUERY}"
       - uses: actions/setup-node@v3
       - uses: borales/actions-yarn@v4
         with:
