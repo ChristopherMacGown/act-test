@@ -64,12 +64,4 @@ jobs:
           cache-to: type=gha,mode=max
           push: false
           target: ${{ matrix.artifact }}
-          tags: ${{ steps.build-tags.outputs.tags }}
-  publish:
-    needs: [front-end, docker]
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "PUBLISH: ${{ matrix.artifact }}"
-    
-  
+          tags: ${{ steps.build-tags.outputs.tags }}  
