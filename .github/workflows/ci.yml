@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+jobs:
+  lint:
+    uses: ./.github/workflows/lint-or-format.yml
+    with:
+      action: check
+  format:
+    uses: ./.github/workflows/lint-or-format.yml
+    with:
+      action: format
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: 
+          - name: "python"
+            cache:
+              path: .venv
+              hash-pattern: "**/poetry.lock"
+          - name: "node"
+            cache:
+              path: .front-end/node_modules/
+              hash-pattern: "**/yarn.lock"
+    name: ${{ matrix.suite.name }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test-runner
+        with:
+          suite: ${{ matrix.suite.name }}
+          cache-path: ${{ matrix.suite.cache.path }}
+          cache-hash-pattern: ${{ matrix.suite.cache.hash-pattern }}
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, format, test]
+    if: ${{ always() && !failure('lint') && !failure('test') }}
+    steps:
+      - run: echo "BUILD TIME!"
+

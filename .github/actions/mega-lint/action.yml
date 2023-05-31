@@ -1,0 +1,43 @@
+name: mega-lint
+description: Runs the specified linter against the local codebase.
+inputs:
+  linter:
+    description: The name of the requested linter.
+    required: true
+  action:
+    description: Whether or not to automatically format with the specified linter.
+    required: true
+outputs:
+  fixable:
+    description: The number of lints the linter can fix.
+    value: ${{ steps.run.outputs.fixable }}
+  remaining:
+    description: The number of lints the linter cannot fixable.
+    value: ${{ steps.run.outputs.remaining }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v3
+      with: 
+        node-version: 18.x
+    - uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    - id: run
+      shell: bash
+      run: ${{ github.action_path }}/${{ inputs.linter }}.sh ${{ inputs.action }}
+    - if: ${{ inputs.action == 'format' }}
+      id: format-patch
+      shell: bash
+      run: |
+        git config --global user.name "[bot] rosie"
+        git config --global user.email "rosie@drill.run"
+        git add -u
+        git commit -m "  * Format Changes from ${{ inputs.linter }}" && \
+        git format-patch --stdout --sn1 HEAD >> ${{ github.run_id }}-patch-${{ inputs.linter }} && \
+        echo 'patched=true' >> $GITHUB_OUTPUT
+    - if: ${{ steps.format-patch.outputs.patched == 'true'}}
+      uses: actions/upload-artifact@v3
+      with:
+        path:  ${{ github.run_id }}-patch-${{ inputs.linter }}
+      

@@ -1,0 +1,40 @@
+name: test-runner
+description: Runs a test suite
+inputs:
+  suite:
+    description: The name of the test runner.
+    required: true
+  cache-path:
+    description: A list of files, directories, and wildcard patterns to cache and restore.  
+    required: true
+  cache-hash-pattern: 
+    description: |
+      A glob pattern for what paths we're going to hash to determine if we need
+      to regenerate a new cache.
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: ${{ inputs.cache-path }}
+        key: ${{ inputs.suite }}-${{ hashFiles(inputs.cache-hash-pattern) }}
+        restore-keys: ${{ inputs.suite }}-${{ hashFiles(inputs.cache-hash-pattern) }}
+    - if: ${{ inputs.suite == 'python' }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+    - if: ${{ inputs.suite == 'python' }}
+      uses: snok/install-poetry@v1
+    - if: ${{ inputs.suite == 'node' }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+    - if: ${{ inputs.suite == 'node' }}
+      uses: borales/actions-yarn@v4.2.0
+      with:
+        cmd: install
+        dir: "front-end/"
+    - shell: bash
+      run: ${{ github.action_path }}/${{ inputs.suite }}.sh

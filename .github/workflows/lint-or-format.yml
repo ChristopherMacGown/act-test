@@ -1,0 +1,30 @@
+on:
+  workflow_call:
+    inputs:
+      action:
+        type: string
+        description: "'check' or 'format'"
+        required: true
+jobs:
+  lint-or-format:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast:  false
+      matrix: 
+        linter: ["ruff", "black", "prettier"]
+    name: ${{ matrix.linter }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/mega-lint
+        with:
+          linter: ${{ matrix.linter }}
+          action: ${{ inputs.action }}
+  post-format:
+    runs-on: ubuntu-latest
+    if: ${{ always() && inputs.action == 'format' }}
+    steps:
+      - uses: actions/download-artifacts@v3
+        with:
+          path: patches
+      - run: |
+          ls -alh patches/

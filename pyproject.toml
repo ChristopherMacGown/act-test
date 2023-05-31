@@ -1,0 +1,29 @@
+[tool.black]
+target-version = ['py39']
+extend-exclude = """(.*)/migrations|apps/(.*).py"""
+
+[tool.ruff]
+select = ["E", "F", "I"]
+exclude = ["migrations"]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+[tool.poetry]
+name = "act-test"
+version = "0.1.0"
+description = ""
+authors = ["Christopher MacGown <chris@macgown.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pytest = "^7.3.1"
+coverage = "^7.2.6"
+pytest-coverage = "^0.0"
+slackclient = { version="^2.9.3", optional = true }
+
+
+[tool.poetry.extras]
+slack = ["slackclient"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
