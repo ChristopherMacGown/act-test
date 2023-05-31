@@ -19,7 +19,7 @@ runs:
       id: builder
     - uses: docker/build-push-action
       with:
-        builder: ${{ steps.builder.outputs.name || ${{ inputs.builder }}
+        builder: ${{ steps.builder.outputs.name || inputs.builder }}
         build-args: ${{ inputs.build-args }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
