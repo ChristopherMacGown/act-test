@@ -65,7 +65,7 @@ jobs:
 
           DISTRIBUTION_STATUS=$(echo "${DISTRIBUTION}" | jq '.Status')
           DISTRIBUTION_ORIGIN=$(echo "${DISTRIBUTION}" | jq '.BlueGreenOrigin')
-          DISTRIBUTION_BLUE_GREEN_STATUS=$(echo "${{ inputs.origin-domains }} | grep "${DISTRIBUTION_ORIGIN}" )
+          DISTRIBUTION_BLUE_GREEN_STATUS=$(echo "${{ inputs.origin-domains }}" | grep "${DISTRIBUTION_ORIGIN}" )
 
           echo "distribution-state=${DISTRIBUTION_STATUS}" >> $GITHUB_OUTPUT
           echo "distribution-origin-status=${DISTRIBUTION_BLUE_GREEN_STATUS}" >> $GITHUB_OUTPUT
