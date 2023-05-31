@@ -12,11 +12,11 @@ runs:
     - uses: borales/actions-yarn@v4
       with:
         cmd: install
-        dir: ${{ input.target }}/
+        dir: ${{ inputs.target }}/
     - uses: borales/actions-yarn@v4
       with:
         cmd: build
-        dir: ${{ input.target }}/
+        dir: ${{ inputs.target }}/
     - shell: bash
       run: |
         DISTRIBUTION_QUERY=$(cat <<- EOF 
