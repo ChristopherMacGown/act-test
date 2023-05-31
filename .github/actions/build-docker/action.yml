@@ -17,7 +17,7 @@ runs:
     - uses: docker/setup-buildx-action@v2
       if: ${{ !inputs.builder }}
       id: builder
-    - uses: docker/build-push-action
+    - uses: docker/build-push-action@v3
       with:
         builder: ${{ steps.builder.outputs.name || inputs.builder }}
         build-args: ${{ inputs.build-args }}
