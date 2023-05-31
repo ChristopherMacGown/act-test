@@ -43,8 +43,8 @@ jobs:
       id-token: write
   deploy:
     runs-on: ubuntu-latest
-    needs: [build]
-    if: ${{ always() && success() && github.branch == 'main' }}
+    needs: [front-end, images]
+    if: ${{ always() && success() }}
     steps:
       - run: echo "DEPLOY"
     permissions:
