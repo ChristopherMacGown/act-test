@@ -1,4 +1,4 @@
-name: lint-python
+name: mega-lint
 description: Runs the specified linter against the local codebase.
 inputs:
   linter:

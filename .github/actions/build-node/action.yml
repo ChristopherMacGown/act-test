@@ -1,0 +1,36 @@
+name: build-node
+description: |
+  Builds a docker image and pushes it up
+inputs:
+  target:
+    description: The directory containing the node package to build.
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+    - uses: borales/actions-yarn@v4
+      with:
+        cmd: install
+        dir: ${{ input.target }}/
+    - uses: borales/actions-yarn@v4
+      with:
+        cmd: build
+        dir: ${{ input.target }}/
+    - shell: bash
+      run: |
+        DISTRIBUTION_QUERY=$(cat <<- EOF 
+          DistributionList.Items[].{
+            Id: Id,
+            Staging: Staging,
+            Status: Status,
+            Origins: Origins.Items[].{
+              Id: Id,
+              DomainName: DomainName
+            }
+          }[?contains(Origins[].Id, \`app.drill.run-production\`) == \`true\`]
+          
+        EOF
+        )
+        aws cloudfront list-distributions --query="${DISTRIBUTION_QUERY}"
+       
