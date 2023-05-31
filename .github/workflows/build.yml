@@ -19,6 +19,8 @@ on:
       version:
         type: string
         default: "1.0"
+permissions:
+  id-token: write
 
 jobs:
   front-end:
