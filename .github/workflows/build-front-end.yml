@@ -29,8 +29,8 @@ jobs:
           );
 
           DISTRIBUTION=$(
-            aws cloudfront 
-            get-distribution --id "${{ inputs.distribution }}"
+            aws cloudfront get-distribution   \
+            --id "${{ inputs.distribution }}" \
             --query "${ DISTRIBUTION_QUERY }"
           )
 
@@ -38,9 +38,8 @@ jobs:
           DISTRIBUTION_ORIGIN=$(echo "${DISTRIBUTION}" | jq '.BlueGreenOrigin')
           DISTRIBUTION_BLUE_GREEN_STATUS=$(echo "${{ inputs.origin-domains }} | grep "${DISTRIBUTION_ORIGIN}" )
 
-          echo "status=${DISTRIBUTION_STATUS}"
-          echo "blue-green-state=${DISTRIBUTION_BLUE_GREEN_STATUS}"
-
+          echo "distribution-state=${DISTRIBUTION_STATUS}"
+          echo "distribution-origin-status=${DISTRIBUTION_BLUE_GREEN_STATUS}"
 
 
 
