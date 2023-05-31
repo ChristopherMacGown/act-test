@@ -35,6 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - uses: aws-actions/configure-aws-credentials
+        with:
+          role-to-assume: arn:aws:iam::391739045280:role/Github-CI+CD-Deployment-Role
+          aws-region: us-west-2
       - uses: actions/download-artifact@v3
         with:
           name: front-end
@@ -52,6 +56,7 @@ jobs:
           );
 
           echo "${DISTRIBUTION_QUERY}"
+          echo "${{ inputs.distribtuion }}"
 
           DISTRIBUTION=$(
             aws cloudfront get-distribution   \
