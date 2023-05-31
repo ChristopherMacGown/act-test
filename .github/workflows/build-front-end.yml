@@ -59,6 +59,8 @@ jobs:
             --query "${DISTRIBUTION_QUERY}"
           )
 
+          echo "${DISTRIBUTION}"
+
           DISTRIBUTION_STATUS=$(echo "${DISTRIBUTION}" | jq '.Status')
           DISTRIBUTION_ORIGIN=$(echo "${DISTRIBUTION}" | jq '.BlueGreenOrigin')
           DISTRIBUTION_BLUE_GREEN_STATUS=$(echo "${{ inputs.origin-domains }} | grep "${DISTRIBUTION_ORIGIN}" )
