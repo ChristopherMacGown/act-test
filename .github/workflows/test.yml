@@ -1,0 +1,26 @@
+on:  
+  workflow_call:
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: 
+          - name: "python"
+            cache:
+              path: .venv
+              hash-pattern: "**/poetry.lock"
+          - name: "node"
+            cache:
+              path: .front-end/node_modules/
+              hash-pattern: "**/yarn.lock"
+    name: ${{ matrix.suite.name }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test-runner
+        with:
+          suite: ${{ matrix.suite.name }}
+          cache-path: ${{ matrix.suite.cache.path }}
+          cache-hash-pattern: ${{ matrix.suite.cache.hash-pattern }}

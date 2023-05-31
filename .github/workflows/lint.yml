@@ -1,0 +1,27 @@
+on:
+  workflow_call:
+  
+jobs:
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        linters:
+            - name: ruff
+            - name: black
+    runs-on: ubuntu-latest
+    name: ${{ matrix.linters.name }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: changes-python
+        uses: actions/cache@v3
+        with:
+          path: .python-cache/
+          key: ${{ runner.os }}-${{ hashFiles('**.py') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('**.py') }}
+      - id: lint
+        if: ${{ steps.changes-python.outputs.cache-hit != 'true' }}
+        uses: ./.github/actions/mega-lint
+        with:
+          linter: ${{ matrix.linters.name }}
+          action: check

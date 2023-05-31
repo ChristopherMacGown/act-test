@@ -1,0 +1,47 @@
+name: CI
+on: 
+  push:
+  workflow_dispatch:
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  lint:
+    uses: ./.github/workflows/lint.yml
+  format:
+    needs: [lint, test]
+    if: ${{ failure('lint') && !failure('test') && github.branch != 'main' }}
+    uses: ./.github/workflows/format.yml
+    secrets: inherit
+    permissions:
+      contents: write
+  front-end:
+    if: ${{ always() && !failure('lint') && !failure('test') }}
+    needs: [format]
+    uses: ./.github/workflows/build-front-end.yml
+    permissions:
+      id-token: write
+    with:
+      distribution: EV2TEW5MOCZE
+      origin-id: app.drill.run-production
+      origin-domains: |
+        blue=app.drill.run-production-blue.s3.us-west-2.amazonaws.com
+        green=app.drill.run-production-green.s3.us-west-2.amazonaws.com
+  images:
+    if: ${{ always() && !failure('lint') && !failure('test') }}
+    needs: [format]
+    uses: ./.github/workflows/build-docker-images.yml
+    with:
+      environment: production
+      latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_number) }}
+      docker-base-image: builder
+      docker-namespace: oreburgh
+    permissions:
+      id-token: write
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [front-end, images]
+    if: ${{ always() && success() }}
+    steps:
+      - run: echo "DEPLOY"
+    permissions:
+      id-token: write

@@ -1,0 +1,67 @@
+on: 
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      latest-tag:
+        type: string
+        required: true
+      docker-base-image:
+        type: string
+        required: true
+      docker-registry:
+        type: string
+        default: registry-1.docker.io
+      docker-namespace:
+        type: string
+        required: true
+      version:
+        type: string
+        default: "1.0"
+
+jobs:
+  base-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: builder
+        uses: docker/setup-buildx-action@v2
+      - name: build intermediate images
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          builder: ${{ steps.builder.outputs.name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          target: ${{ inputs.docker-base-image }}
+          push: false
+  docker:
+    needs: [base-images]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+       artifact: ["api", "bit-runner", "task-scheduler"]
+    name: ${{ matrix.artifact }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: builder
+        uses: docker/setup-buildx-action@v2
+      - id: build-tags
+        run: |
+          IMAGE="${{ inputs.docker-registry }}/${{ inputs.docker-namespace }}/${{ matrix.artifact }}"
+          echo 'tags<<EOF' >> $GITHUB_OUTPUT
+          echo "${IMAGE}:${{ inputs.latest-tag}}" >> $GITHUB_OUTPUT
+          echo "${IMAGE}:${{ inputs.version }}.${{ github.run_number }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      - uses: docker/build-push-action@v3
+        with:
+          context: .
+          builder: ${{ steps.builder.outputs.name }}
+          build-args: env_name=${{ inputs.environment }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: false
+          target: ${{ matrix.artifact }}
+          tags: ${{ steps.build-tags.outputs.tags }}  
