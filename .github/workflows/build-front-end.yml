@@ -50,13 +50,10 @@ jobs:
               Status: Status,
               BlueGreenOrigin: DistributionConfig.
                 Origins.
-                  Items[?Id==\`${{ inputs.origin-id }}\`][0]
+                  Items[?Id==\`${{ inputs.origin-id }}\`] | [0].DomainName
             }
           EOF
           );
-
-          echo "${DISTRIBUTION_QUERY}"
-          echo "${{ inputs.distribtuion }}"
 
           DISTRIBUTION=$(
             aws cloudfront get-distribution   \

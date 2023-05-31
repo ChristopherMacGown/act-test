@@ -16,8 +16,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .python-cache/
-          key: ${{ runner.os }}-${{ hashFiles('**.py')}}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('**.py')}}
+          key: ${{ runner.os }}-${{ hashFiles('**/*.py')}}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('**/*.py')}}
       - uses: actions/checkout@v3
       - id: lint
         if: ${{ steps.changes-python.outputs.cache-hit != 'true' }}
