@@ -32,15 +32,16 @@ jobs:
       - id: determine-distribution-state
         run: |
           DISTRIBUTION_QUERY=$(cat <<- EOF 
-          \tDistributionList.Items[].{
-          \t\tId: Id,
-          \t\tStaging: Staging,
-          \t\tStatus: Status,
-          \t\tOrigins: Origins.Items[].{
-          \t\t\tId: Id,
-          \t\t\tDomainName: DomainName
-          \t\t}
-          \t}[?contains(Origins[].Id, \`app.drill.run-production\`) == \`true\`]
+            DistributionList.Items[].{
+              Id: Id,
+              Staging: Staging,
+              Status: Status,
+              Origins: Origins.Items[].{
+                Id: Id,
+                DomainName: DomainName
+              }
+            }[?contains(Origins[].Id, \`app.drill.run-production\`) == \`true\`]
+            
           EOF
           )
           aws cloudfront list-distributions --query="${DISTRIBUTION_QUERY}"
