@@ -51,10 +51,12 @@ jobs:
           EOF
           );
 
+          echo "${DISTRIBUTION_QUERY}"
+
           DISTRIBUTION=$(
             aws cloudfront get-distribution   \
             --id "${{ inputs.distribution }}" \
-            --query "${ DISTRIBUTION_QUERY }"
+            --query "${DISTRIBUTION_QUERY}"
           )
 
           DISTRIBUTION_STATUS=$(echo "${DISTRIBUTION}" | jq '.Status')
