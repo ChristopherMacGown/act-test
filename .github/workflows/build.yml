@@ -4,6 +4,12 @@ on:
       environment:
         type: string
         required: true
+      origin-id:
+        type: string
+        required: true
+      buckets:
+        type: string
+        required: true
       latest-tag:
         type: string
         required: true
@@ -54,6 +60,29 @@ jobs:
         id: builder
       - id: build-tags
         run: |
+          DISTRIBUTION_QUERY=$(cat <<- EOF 
+            DistributionList.Items[*].{
+              Id: Id,
+              Staging: Staging,
+              Status: Status,
+              Origins: Origins.Items[].{
+                Id: Id,
+                DomainName: DomainName
+              }
+            }[?contains(Origins[].Id, \`${{ inputs.origin-id }}\`) == \`true\`] | [?Staging == \`false\`]
+            .Origins[].{Id: Id, DomainName: DomainName}
+          EOF
+          )
+
+          PROD_BUCKET=$(
+            aws cloudfront list-distributions --query "${ DISTRIBUTION_QUERY }" | 
+            jq -r 'map(
+                    select(.Origins[].Id == "${{ inputs.origin-id }}")
+                    | .Origins[].DomainName
+                  ) | add'
+          )
+          PROD_BUCKET=${PROD_BUCKET%.s3*}
+          echo ${PROD_BUCKET};
           IMAGE="${{ inputs.docker-registry }}/${{ inputs.docker-namespace }}/${{ matrix.artifact }}"
           echo 'tags<<EOF' >> $GITHUB_OUTPUT
           echo "${IMAGE}:${{ inputs.latest-tag}}" >> $GITHUB_OUTPUT
@@ -62,7 +91,8 @@ jobs:
       - if: ${{ matrix.artifact  == 'front-end' }}
         uses: ./.github/actions/build-node/
         with:
-          target: ${{ matrix.artifact }}
+          directory: ${{ matrix.artifact }}
+          target: ${{ steps.build-tags.outputs.s3-bucket }}
       - if: ${{ matrix.artifact  != 'front-end' }}
         uses: ./.github/actions/build-docker/
         with:

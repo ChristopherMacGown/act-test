@@ -19,6 +19,10 @@ jobs:
     uses: ./.github/workflows/build.yml
     needs: [format]
     with:
+      origin-id: app.drill.run-production
+      buckets: |
+        blue=app.drill.run-production-blue
+        green=app.drill.run-production-green
       environment: production
       latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_number) }}
       docker-base-image: builder
