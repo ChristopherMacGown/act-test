@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: front-end/
+          name: front-end
           path: front-end/dist/
       - id: status
         run: |
