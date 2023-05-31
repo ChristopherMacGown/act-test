@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          DISTRIBUTION_QUERY=$(cat <<- EOF
+          export DISTRIBUTION_QUERY=$(cat <<- EOF
             Distribution.{
               Status: Status,
               BlueGreenOrigin: DistributionConfig.
