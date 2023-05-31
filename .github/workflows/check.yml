@@ -18,6 +18,8 @@ jobs:
     if: ${{ always() && !failure('lint') && !failure('test') }}
     needs: [format]
     uses: ./.github/workflows/build-front-end.yml
+    permissions:
+      id-token: write
     with:
       distribution: EV2TEW5MOCZE
       origin-id: app.drill.run-production
@@ -28,8 +30,6 @@ jobs:
     if: ${{ always() && !failure('lint') && !failure('test') }}
     needs: [format]
     uses: ./.github/workflows/build-docker-images.yml
-    if:  ${{ always() && !failure('lint') && !failure('test') }}
-    uses: ./.github/workflows/build.yml
     with:
       origin-id: app.drill.run-production
       buckets: |
