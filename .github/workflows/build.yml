@@ -19,8 +19,6 @@ on:
       version:
         type: string
         default: "1.0"
-permissions:
-  id-token: write
 
 jobs:
   front-end:
@@ -43,6 +41,7 @@ jobs:
                 DomainName: DomainName
               }
             }[?contains(Origins[].Id, \`app.drill.run-production\`) == \`true\`]
+            
             EOF
           )
           aws cloudfront list-distributions --query="${DISTRIBUTION_QUERY}"
