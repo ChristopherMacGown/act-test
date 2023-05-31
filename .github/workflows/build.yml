@@ -60,11 +60,11 @@ jobs:
           echo "${IMAGE}:${{ inputs.version }}.${{ github.run_number }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - if: ${{ matrix.artifact }} == 'front-end'
-        uses: ./github/actions/build-node
+        uses: ./.github/actions/build-node/
         with:
           target: ${{ matrix.artifact }}
       - if: ${{ matrix.artifact }} != 'front-end'
-        uses: ./github/actions/build-docker
+        uses: ./.github/actions/build-docker/
         with:
           builder: ${{ steps.builder.outputs.name }}
           build-args: env_name=${{ inputs.environment }}
