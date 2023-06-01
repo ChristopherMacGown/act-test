@@ -20,8 +20,9 @@ jobs:
           linter: ${{ matrix.linter }}
           action: ${{ inputs.action }}
   post-format:
+    needs: [lint-or-format]
     runs-on: ubuntu-latest
-    if: ${{ always() && failure('lint-or-format') && inputs.action == 'format' }}
+    if: ${{ always() && failure() && inputs.action == 'format' }}
     steps:
       - uses: actions/download-artifact@v3
         with:

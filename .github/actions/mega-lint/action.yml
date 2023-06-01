@@ -37,11 +37,8 @@ runs:
         git format-patch --stdout -s -n -1 HEAD >> ${{ github.run_id }}-patch-${{ inputs.linter }} && \
         echo 'patched=true' >> $GITHUB_OUTPUT || /bin/true
     - if: ${{ always() && steps.format-patch.outputs.patched == 'true'}}
-      shell: bash
-      run: |
-        echo UPLOAD ALREADY GOSH 
-    - if: ${{ always() && steps.format-patch.outputs.patched == 'true'}}
       uses: actions/upload-artifact@v3
       with:
+        name:  ${{ github.run_id }}-patch-${{ inputs.linter }}
         path:  ${{ github.run_id }}-patch-${{ inputs.linter }}
       
