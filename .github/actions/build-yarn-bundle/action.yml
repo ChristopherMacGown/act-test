@@ -25,4 +25,4 @@ runs:
     - uses: actions/upload-artifact@v3
       with:
         name: front-end
-        path: front-end/dist/
+        path: ${{ inputs.dir}}/dist/

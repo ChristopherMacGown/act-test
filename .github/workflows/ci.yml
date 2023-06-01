@@ -105,4 +105,9 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.artifact.name }}
-      - run: ls -alh .
+      - if: ${{ matrix.artifact.kind == 'docker' }}
+        run: |
+          docker load --input /tmp/${{ inputs.base-image }}.tar
+          docker image ls -a
+      - if: ${{ matrix.artifact.kind == 'yarn' }}
+        run: ls -alh .
