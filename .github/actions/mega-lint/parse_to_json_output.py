@@ -5,8 +5,8 @@ import sys
 BLACK_OUTPUT_RE = re.compile(
     r"(?P<count>\d+)"  # The number of changes black's reporting
     r"\s+file[s]?(\s+would( be)?)?\s+"  # Filler
-    r"?(?P<action>.*$)" # The action in question.
-)  
+    r"?(?P<action>.*$)"  # The action in question.
+)
 
 PRETTIER_OUTPUT_RE = re.compile(
     r"^\[warn\] Code style issues found in (?P<count>\d+) files.*$"
@@ -27,6 +27,7 @@ def parse_black(black):
             raise Exception(f"Unexpected input from Black!: {line}")
         print(json.dumps(build_report(**match.groupdict())))
 
+
 def parse_prettier(prettier):
     match = PRETTIER_OUTPUT_RE.match(prettier)
     if not match:
@@ -34,12 +35,13 @@ def parse_prettier(prettier):
     print(json.dumps(build_report(action="fix", **match.groupdict())))
 
 
-PARSERS=dict(
+PARSERS = dict(
     black=parse_black,
     prettier=parse_prettier,
 )
 
 if __name__ == "__main__":
+
     def usage():
         print(f"Usage: {sys.argv[0]} [black|prettier]")
         sys.exit(-1)

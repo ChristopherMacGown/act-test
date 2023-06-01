@@ -1,20 +1,20 @@
-import { fileURLToPath, URL } from 'url'
+import { fileURLToPath, URL } from "url";
 
-import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from "vitest/config";
+import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
-    plugins: [vue()],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-    define: {
-        'process.env.ES_BUILD': process.env.ES_BUILD,
-    },
+  },
+  define: {
+    "process.env.ES_BUILD": process.env.ES_BUILD,
+  },
 
-    test: {
-        environment: 'jsdom'
-    },
-})
+  test: {
+    environment: "jsdom",
+  },
+});
