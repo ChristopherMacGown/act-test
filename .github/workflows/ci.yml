@@ -3,7 +3,7 @@ on:
   push:
 jobs:
   lint:
-    if: ${{ never() }}
+    if: ${{ 1 == 2 }}
     uses: ./.github/workflows/lint-or-format.yml
     with:
       action: check
