@@ -48,4 +48,4 @@ jobs:
     if: ${{ always() && !failure('lint') && !failure('test') }}
     steps:
       - run: echo "BUILD TIME!"
-
+      - run: echo "TIME FOR BUILDING"
