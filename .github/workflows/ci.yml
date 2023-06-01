@@ -18,6 +18,9 @@ jobs:
           action: check
   format:
     uses: ./.github/workflows/format.yml
+    secrets: inherit
+    permissions:
+      contents: write
   test:
     runs-on: ubuntu-latest
     strategy:
