@@ -37,7 +37,7 @@ runs:
     - if: ${{ inputs.base-image }}
       shell: bash
       run: |
-        docker load --input /tmp/myimage.tar
+        docker load --input /tmp/${{ inputs.base-image }}.tar
         docker image ls -a
     - uses: docker/setup-buildx-action@v2
       id: builder
