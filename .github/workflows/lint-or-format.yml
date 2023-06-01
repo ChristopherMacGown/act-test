@@ -24,8 +24,21 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ always() && failure() && inputs.action == 'format' }}
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
           path: patches
       - run: |
-          ls -alh patches/
+          LINTERS=""
+          for linter in $(ls patches/ | cut -d '-' -f 3); do
+            LINTERS+=$(printf "  * Changes from %s\n" "${linter}")
+          done
+
+          git config --global user.name "[bot] rosie"
+          git config --global user.email "rosie@drill.run"
+          git apply patches/*
+          git commit -F- <<-EOF
+            Automated commit with patches from linters.
+            
+            ${LINTERS}
+          EOF
