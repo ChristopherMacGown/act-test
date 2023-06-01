@@ -17,7 +17,7 @@ jobs:
           linter: ${{ matrix.linter }}
           action: check
   format:
-    uses: ./github/workflows/format.yml
+    uses: ./.github/workflows/format.yml
   test:
     runs-on: ubuntu-latest
     strategy:
