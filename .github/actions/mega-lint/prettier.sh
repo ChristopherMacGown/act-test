@@ -9,7 +9,7 @@ case "${COMMAND}" in
 check)
     install_node_package prettier
     report $(
-        prettier -c . 2>&1 |
+        prettier -c . '!.github' 2>&1 |
             tail -1 |
             python "${BASH_SOURCE%/*}/parse_to_json_output.py" prettier |
             jq -s 'add
@@ -21,7 +21,7 @@ check)
 format)
     install_node_package prettier
     report $(
-        printf "[warn] Code style issues found in %d files." $(prettier --write . | wc -l) |
+        printf "[warn] Code style issues found in %d files." $(prettier --write . '!.github' | wc -l) |
             python "${BASH_SOURCE%/*}/parse_to_json_output.py" prettier |
             jq -s 'add
                 | select(. != null)
