@@ -48,12 +48,15 @@ jobs:
           suite: python
           cache-path: .venv
           cache-hash-pattern: "**/poetry.lock"
-      - if: ${{ steps.prepare.outputs.changes >= 1 }} 
+      - id: auto-commit-action
+        if: ${{ steps.prepare.outputs.changes >= 1 }} 
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           add_options: "-u"
           commit_user_name: ${{ inputs.committer-name }}
           commit_user_email: ${{ inputs.committer-email }}
           commit_message: ${{ steps.prepare.outputs.commit-message }}
-      - if: ${{ steps.prepare.outputs.changes >= 1 }}
-        run: /bin/false
+      - if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        run: |
+          echo "Failing build because we had format errors."
+          /bin/false
