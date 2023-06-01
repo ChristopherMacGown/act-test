@@ -9,7 +9,7 @@ case "${COMMAND}" in
 check)
     install_node_package prettier
     report $(
-        prettier -c . |
+        prettier -c . 2>&1 |
             tail -1 |
             python "${BASH_SOURCE%/*}/parse_to_json_output.py" prettier |
             jq -s 'add
