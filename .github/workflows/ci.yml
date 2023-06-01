@@ -76,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - if: ${{ matrix.artifact.kind == 'docker' }}
-        uses: ./.github/workflows/build-docker-image.yml
+        uses: ./.github/actions/build-docker-image
         with:
           target: ${{ matrix.artifact.name }}
           buildx: ${{ needs.prepare-build.outputs.buildx }}
