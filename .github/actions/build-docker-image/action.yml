@@ -10,6 +10,8 @@ inputs:
   environment:
     description: The environment passed in
     default: production
+  repo:
+    description: The image repo we're trying to build for
   latest-tag:
     description: The tag for latest
   version:
@@ -20,6 +22,7 @@ runs:
   steps:
     - shell: bash
       id: build-tags
+      if: ${{ inputs.repo }}
       run: |
         IMAGE="${{ inputs.repo }}/${{ inputs.artifact }}"
         echo 'tags<<EOF' >> $GITHUB_OUTPUT
