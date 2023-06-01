@@ -4,9 +4,8 @@ inputs:
   target:
     description: The name of the target image from the Dockerfile.
     required: true
-  buildx:
-    description: The name of the buildx builder to be used by docker/build-push-action
-    required: true
+  base-image:
+    description: "The name of a base-image artifact to use to build"
   environment:
     description: The environment passed in
     default: production
@@ -30,13 +29,30 @@ runs:
         echo "${IMAGE}:${{ inputs.version }}.${{ github.run_id }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
     - uses: actions/checkout@v3
+    - if: ${{ inputs.base-image }}
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.base-image }}
+        path: /tmp
+    - if: ${{ inputs.base-image }}
+      shell: bash
+      run: |
+        docker load --input /tmp/myimage.tar
+        docker image ls -a
+    - uses: docker/setup-buildx-action@v2
+      id: builder
     - uses: docker/build-push-action@v4
       with:
-        builder: ${{ inputs.buildx }}
+        builder: ${{ steps.builder.outputs.name }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         context: .
+        outputs: type=docker,dest=/tmp/${{ inputs.target }}.tar
         push: false
         target: ${{ inputs.target }}
         tags: |
           ${{ steps.build-tags.outputs.tags }}
+    - uses: actions/upload-artifact@v3
+      with:
+       name: ${{ inputs.target }}
+       path: /tmp/${{ inputs.target }}.tar

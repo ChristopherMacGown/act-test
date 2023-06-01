@@ -48,16 +48,13 @@ jobs:
   prepare-build:
     runs-on: ubuntu-latest
     outputs:
-      buildx: ${{ steps.builder.outputs.name }}
+      base-image: builder
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v2
-        id: builder
       - id: base-images
         uses: ./.github/actions/build-docker-image
         with:
           target: builder
-          buildx: ${{ steps.builder.outputs.name }}
   build:
     if: ${{ always() && !failure('format') && !failure('test') && !failure('lint') }}
     needs: [prepare-build, format, test, lint]
@@ -80,6 +77,6 @@ jobs:
         uses: ./.github/actions/build-docker-image
         with:
           target: ${{ matrix.artifact.name }}
-          buildx: ${{ needs.prepare-build.outputs.buildx }}
+          base-image: ${{ needs.prepare-build.outputs.base-image }}
           latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_id) }}
           repo: "emr.url.amazonaws.com/oreburgh/"
