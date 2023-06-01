@@ -51,12 +51,13 @@ jobs:
       - uses: docker/setup-buildx-action@v2
         id: builder
       - id: base-images
-        uses: ./.github/workflows/build-docker-image.yml
+        uses: ./.github/actions/build-docker-image
         with:
           target: builder
           buildx: ${{ steps.builder.outputs.name }}
   build:
-    needs: [prepare-build]
+    needs: [prepare-build, format, test, lint]
+    if: 
     runs-on: ubuntu-latest
     strategy:
       matrix:

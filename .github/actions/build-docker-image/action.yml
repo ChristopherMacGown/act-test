@@ -1,0 +1,39 @@
+name: build-docker-image
+description: Build a docker image from a multitarget dockerfile.
+inputs:
+  target:
+    description: The name of the target image from the Dockerfile.
+    required: true
+  buildx:
+    description: The name of the buildx builder to be used by docker/build-push-action
+    required: true
+  environment:
+    description: The environment passed in
+    default: production
+  latest-tag:
+    description: The tag for latest
+  version:
+    description: The semantic version
+    default: "1.0"
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      id: build-tags
+      run: |
+        IMAGE="${{ inputs.repo }}/${{ inputs.artifact }}"
+        echo 'tags<<EOF' >> $GITHUB_OUTPUT
+        echo "${IMAGE}:${{ inputs.latest-tag }}" >> $GITHUB_OUTPUT
+        echo "${IMAGE}:${{ inputs.version }}.${{ github.run_id }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+    - uses: action/checkout@v3
+    - uses: docker/build-push-action@v4
+      with:
+        builder: ${{ inputs.buildx }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        context: .
+        push: false
+        target: ${{ inputs.target }}
+        tags: |
+          ${{ steps.build-tags.outputs.tags }}
