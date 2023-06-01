@@ -80,3 +80,8 @@ jobs:
           base-image: ${{ needs.prepare-build.outputs.base-image }}
           latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_id) }}
           repo: "emr.url.amazonaws.com/oreburgh"
+      - if: ${{ matrix.artifact.kind == 'yarn' }}
+        uses: ./.github/actions/build-yarn-bundle
+        with:
+          target: ${{ matrix.artifact.name }}
+          dir: front-end/
