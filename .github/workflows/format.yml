@@ -52,7 +52,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           add_options: |
-            ':!**/poetry.lock' ':!**/.coverage'
+            ':!**/poetry.lock' ':!**/yarn.lock' 
           commit_user_name: ${{ inputs.committer-name }}
           commit_user_email: ${{ inputs.committer-email }}
           commit_message: ${{ steps.prepare.outputs.commit-message }}
