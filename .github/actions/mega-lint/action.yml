@@ -35,8 +35,12 @@ runs:
         git add -u
         git commit -m "  * Format Changes from ${{ inputs.linter }}" && \
         git format-patch --stdout -s -n -1 HEAD >> ${{ github.run_id }}-patch-${{ inputs.linter }} && \
-        echo 'patched=true' >> $GITHUB_OUTPUT
-    - if: ${{ steps.format-patch.outputs.patched == 'true'}}
+        echo 'patched="true"' >> $GITHUB_OUTPUT || /bin/true
+    - if: ${{ always() }}
+      shell: bash
+      run: |
+        echo ${{ steps.format-patch.outputs.patched }}
+    - if: ${{ always() && steps.format-patch.outputs.patched == 'true'}}
       uses: actions/upload-artifact@v3
       with:
         path:  ${{ github.run_id }}-patch-${{ inputs.linter }}

@@ -21,9 +21,9 @@ jobs:
           action: ${{ inputs.action }}
   post-format:
     runs-on: ubuntu-latest
-    if: ${{ always() && inputs.action == 'format' }}
+    if: ${{ always() && failure('lint-or-format') && inputs.action == 'format' }}
     steps:
-      - uses: actions/download-artifacts@v3
+      - uses: actions/download-artifact@v3
         with:
           path: patches
       - run: |
