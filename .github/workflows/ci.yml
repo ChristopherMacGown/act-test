@@ -87,6 +87,7 @@ jobs:
           dir: front-end/
   publish:
     needs: [build]
+    if: ${{ always() && !failure('build') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
