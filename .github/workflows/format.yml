@@ -17,21 +17,18 @@ jobs:
       - uses: actions/checkout@v3
       - id: ruff
         continue-on-error: true
-        name: format ruff
         uses: ./.github/actions/mega-lint
         with:
           linter: ruff
           action: format
       - id: black
         continue-on-error: true
-        name: format black
         uses: ./.github/actions/mega-lint
         with: 
           linter: black
           action: format
       - id: prettier
         continue-on-error: true
-        name: format black
         uses: ./.github/actions/mega-lint
         with: 
           linter: prettier

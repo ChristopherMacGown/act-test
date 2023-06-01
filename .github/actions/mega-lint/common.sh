@@ -9,7 +9,7 @@ install_pip_package() {
 
 install_node_package() {
     local package_name=${1:-""}
-    if [ -z "${ package_name}" ]; then
+    if [ -z "${package_name}" ]; then
         exit -1
     fi
 
