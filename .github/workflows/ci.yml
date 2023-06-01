@@ -47,7 +47,7 @@ jobs:
     outputs:
       buildx: ${{ steps.builder.outputs.name }}
     steps:
-      - uses: action/checkout@v3
+      - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
         id: builder
       - id: base-images
@@ -71,7 +71,7 @@ jobs:
             kind: docker
     name: ${{ matrix.artifact.name }}
     steps:
-      - uses: action/checkout@v3
+      - uses: actions/checkout@v3
       - if: ${{ matrix.artifact.kind == 'docker' }}
         uses: ./.github/workflows/build-docker-image.yml
         with:
