@@ -107,7 +107,7 @@ jobs:
           name: ${{ matrix.artifact.name }}
       - if: ${{ matrix.artifact.kind == 'docker' }}
         run: |
-          docker load --input /tmp/${{ inputs.base-image }}.tar
+          docker load --input /tmp/${{ matrix.artifact.name }}.tar
           docker image ls -a
       - if: ${{ matrix.artifact.kind == 'yarn' }}
         run: ls -alh .
