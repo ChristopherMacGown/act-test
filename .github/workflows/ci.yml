@@ -4,13 +4,63 @@ on:
 jobs:
   lint:
     if: ${{ 1 == 2 }}
-    uses: ./.github/workflows/lint-or-format.yml
-    with:
-      action: check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast:  false
+      matrix: 
+        linter: ["ruff", "black", "prettier"]
+    name: ${{ matrix.linter }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/mega-lint
+        with:
+          linter: ${{ matrix.linter }}
+          action: check
   format:
-    uses: ./.github/workflows/lint-or-format.yml
-    with:
-      action: format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: ruff
+        continue-on-error: true
+        name: format ruff
+        uses: ./.github/actions/mega-lint
+        with:
+          linter: ruff
+          action: format
+      - id: black
+        continue-on-error: true
+        name: format black
+        uses: ./.github/actions/mega-lint
+        with: 
+          linter: black
+          action: format
+      - id: prepare
+        run: |
+          CHANGES=$(git status -s | wc -l )
+          REMAINING=$(sed -e 's/^[[:space:]]*,*/[/' -e 's/,,*/,/g' -e 's/,*$/]/' <<-EOF
+          ${{ join(steps.*.outputs.remaining) }}
+          EOF
+          );
+
+          echo changes=${CHANGES} >> $GITHUB_OUTPUT
+          echo remaining=$(echo ${REMAINING} | jq 'add') >> $GITHUB_OUTPUT
+          echo 'commit-message<<EOF' >> $GITHUB_OUTPUT
+          echo '${{ inputs.commit-message-header }}' >> $GITHUB_OUTPUT
+          echo >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      - uses: ./.github/actions/test-runner
+        with:
+          suite: python
+          cache-path: .venv
+          cache-hash-pattern: "**/poetry.lock"
+      - if: ${{ always() && !failure() && steps.prepare.outputs.changes >= 1 }} 
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_user_name: "[bot] rosie"
+          commit_user_email: "rosie@drill.run"
+          commit_message: ${{ steps.prepare.outputs.commit-message }}
+      - if: ${{ steps.prepare.outputs.changes >= 1 }}
+        run: /bin/false
   test:
     runs-on: ubuntu-latest
     strategy:
