@@ -7,6 +7,15 @@ install_pip_package() {
     pip install --disable-pip-version-check ${package_name}
 }
 
+install_node_package() {
+    local package_name=${1:-""}
+    if [ -z "${ package_name}" ]; then
+        exit -1
+    fi
+
+    node install --global ${package_name}
+}
+
 report() {
     local report=${@:-""}
     if [ -z "${report}" ]; then

@@ -7,11 +7,11 @@ source ${BASH_SOURCE%/*}/common.sh
 COMMAND=${1:-""}
 case "${COMMAND}" in
 check)
-    install_pip_package black
+    install_node_package prettier
     report $(
-        black --check . 2>&1 |
+        prettier -c . |
             tail -1 |
-            python "${BASH_SOURCE%/*}/parse_to_json_output.py" black |
+            python "${BASH_SOURCE%/*}/parse_to_json_output.py" prettier |
             jq -s 'add
                 | select(. != null)
                 | @json'
@@ -19,11 +19,10 @@ check)
 
     ;;
 format)
-    install_pip_package black
+    install_node_package prettier
     report $(
-        black . 2>&1 |
-            tail -1 |
-            python "${BASH_SOURCE%/*}/parse_to_json_output.py" black |
+        printf "[warn] Code style issues found in %d files." $(prettier --write . | wc -l) |
+            python "${BASH_SOURCE%/*}/parse_to_json_output.py" prettier |
             jq -s 'add
                 | select(. != null)
                 | @json'
