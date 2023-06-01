@@ -26,11 +26,11 @@ jobs:
       fail-fast: false
       matrix:
         suite: 
-          - name: "python"
+          - name: python
             cache:
               path: .venv
               hash-pattern: "**/poetry.lock"
-          - name: "node"
+          - name: node
             cache:
               path: .front-end/node_modules/
               hash-pattern: "**/yarn.lock"

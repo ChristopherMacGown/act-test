@@ -47,11 +47,18 @@ jobs:
           echo '${{ inputs.commit-message-header }}' >> $GITHUB_OUTPUT
           echo >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-      - uses: ./.github/actions/test-runner
+      - if: ${{ steps.prepare.outputs.changes >= 1 }} 
+        uses: ./.github/actions/test-runner
         with:
           suite: python
           cache-path: .venv
           cache-hash-pattern: "**/poetry.lock"
+      - if: ${{ steps.prepare.outputs.changes >= 1 }}
+        uses: ./.github/actions/test-runner
+        with:
+          suite: node
+          cache-path: .front-end/node_modules/
+          cache-hash-pattern: "**/yarn.lock"
       - id: auto-commit-action
         if: ${{ steps.prepare.outputs.changes >= 1 }} 
         uses: stefanzweifel/git-auto-commit-action@v4
