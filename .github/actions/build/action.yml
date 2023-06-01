@@ -1,0 +1,25 @@
+name: build
+description: Runs the specified builder against the local codebase.
+inputs:
+  artifact: 
+    description: The name of the artifact.
+    required: true
+  builder:
+    description: The name of the BuildX builder artifact.
+    required: true
+  kind:
+    description: The kind of artifact we're building ('yarn' or 'docker')
+runs:
+  using: composite
+  steps:
+    - if: ${{ input.kind == 'docker' }}
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        builder: ${{ steps.builder.outputs.name }}
+        build-args: env_name=${{ inputs.environment }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        push: false
+        target: ${{ matrix.artifact }}
+        tags: ${{ steps.build-tags.outputs.tags }}  

@@ -42,10 +42,45 @@ jobs:
           suite: ${{ matrix.suite.name }}
           cache-path: ${{ matrix.suite.cache.path }}
           cache-hash-pattern: ${{ matrix.suite.cache.hash-pattern }}
-  build:
+  prepare-build:
     runs-on: ubuntu-latest
-    needs: [lint, format, test]
-    if: ${{ always() && !failure('lint') && !failure('test') }}
+    outputs:
+      buildx: ${{ steps.builder.outputs.name }}
     steps:
-      - run: echo "BUILD TIME!"
-      - run: echo "TIME FOR BUILDING"
+      - uses: action/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+        id: builder
+      - id: base-images
+        uses: ./.github/workflows/build-docker-image.yml
+        with:
+          target: builder
+          buildx: ${{ steps.builder.outputs.name }}
+  build:
+    needs: [prepare-build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        artifact:
+          - name: front-end
+            kind: yarn
+          - name: api
+            kind: docker
+          - name: bit-runner
+            kind: docker
+          - name: task-scheduler
+            kind: docker
+    name: ${{ matrix.artifact.name }}
+    steps:
+      - uses: action/checkout@v3
+      - if: ${{ matrix.artifact.kind == 'docker' }}
+        uses: ./.github/workflows/build-docker-image.yml
+        with:
+          target: ${{ matrix.artifact.name }}
+          buildx: ${{ needs.prepare-build.outputs.buildx }}
+      - id: base-images
+        uses: ./.github/workflows/build-docker-image.yml
+        with:
+          target: builder
+          buildx: ${{ steps.builder.outputs.name }}
+          latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_id) }}
+          repo: "emr.url.amazonaws.com/oreburgh/"

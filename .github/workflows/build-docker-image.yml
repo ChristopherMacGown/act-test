@@ -1,0 +1,40 @@
+on: 
+  workflow_call:
+    inputs:
+      target:
+        type: string
+        required: true
+      buildx:
+        type: string
+        required: true
+      environment:
+        type: string
+        default: production
+      latest-tag:
+        type: string
+      version:
+        type: string
+        default: "1.0"
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v3
+      - id: build-tags
+        run: |
+          IMAGE="${{ inputs.repo }}/${{ inputs.artifact }}"
+          echo 'tags<<EOF' >> $GITHUB_OUTPUT
+          echo "${IMAGE}:${{ inputs.latest-tag }}" >> $GITHUB_OUTPUT
+          echo "${IMAGE}:${{ inputs.version }}.${{ github.run_id }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      - uses: docker/build-push-action@v4
+        with:
+          builder: ${{ inputs.buildx }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          context: .
+          push: false
+          target: ${{ inputs.target }}
+          tags: |
+            ${{ steps.build-tags.outputs.tags }}
+
