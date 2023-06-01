@@ -29,6 +29,13 @@ jobs:
         with: 
           linter: black
           action: format
+      - id: prettier
+        continue-on-error: true
+        name: format black
+        uses: ./.github/actions/mega-lint
+        with: 
+          linter: prettier
+          action: format
       - id: prepare
         run: |
           CHANGES=$(git status -s | wc -l )
