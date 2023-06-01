@@ -26,7 +26,7 @@ runs:
     - id: run
       shell: bash
       run: ${{ github.action_path }}/${{ inputs.linter }}.sh ${{ inputs.action }}
-    - if: ${{ inputs.action == 'format' }}
+    - if: ${{ always() && failure() && inputs.action == 'format' }}
       id: format-patch
       shell: bash
       run: |
@@ -34,7 +34,7 @@ runs:
         git config --global user.email "rosie@drill.run"
         git add -u
         git commit -m "  * Format Changes from ${{ inputs.linter }}" && \
-        git format-patch --stdout --sn1 HEAD >> ${{ github.run_id }}-patch-${{ inputs.linter }} && \
+        git format-patch --stdout -s -n -1 HEAD >> ${{ github.run_id }}-patch-${{ inputs.linter }} && \
         echo 'patched=true' >> $GITHUB_OUTPUT
     - if: ${{ steps.format-patch.outputs.patched == 'true'}}
       uses: actions/upload-artifact@v3
