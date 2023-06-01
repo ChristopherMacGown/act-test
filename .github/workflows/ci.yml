@@ -85,3 +85,23 @@ jobs:
         with:
           target: ${{ matrix.artifact.name }}
           dir: front-end/
+  publish:
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        artifact:
+          - name: front-end
+            kind: yarn
+          - name: api
+            kind: docker
+          - name: bit-runner
+            kind: docker
+          - name: task-scheduler
+            kind: docker
+    name: ${{ matrix.artifact.name }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.artifact.name }}
+      - run: ls -alh .
