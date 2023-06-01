@@ -13,7 +13,7 @@ install_node_package() {
         exit -1
     fi
 
-    node install --global ${package_name}
+    npm install --global ${package_name}
 }
 
 report() {
