@@ -59,6 +59,7 @@ jobs:
           target: builder
           buildx: ${{ steps.builder.outputs.name }}
   build:
+    if: ${{ always() && !failure('format') && !failure('test') && !failure('lint') }}
     needs: [prepare-build, format, test, lint]
     runs-on: ubuntu-latest
     strategy:
