@@ -106,7 +106,8 @@ jobs:
           - front-end
           - api
           - scheduler
-    name: ${{ strategy.matrix.service }}
+          - lambdas
+    name: ${{ matrix.service }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
