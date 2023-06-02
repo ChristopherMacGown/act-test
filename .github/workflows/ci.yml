@@ -129,21 +129,18 @@ jobs:
       matrix:
         service:
           - name: front-end
-            is-front-end: true
           - name: api
           - name: scheduler
     name: ${{ strategy.matrix.service }}
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::391739045280:role/Github-CI+CD-Deployment-Role
           aws-region: us-west-2
-      - if: ${{ matrix.service.is-front-end == 'true' }}
-        run: |
-          echo deploy ${{ matrix.service.name }}
-      - if: ${{ matrix.service.is-front-end != 'true' }}
-        uses: ./.github/actions/fabric
-        with:
-          task: ${{ format('deploy-{0}', matrix.service.name ) }}
-          args: stack --production
+      - run: |
+          pip install --disable-pip-version-check fabric
+          fab --dry ${{ format('deploy-{0}', matrix.service.name ) }} --stack production
