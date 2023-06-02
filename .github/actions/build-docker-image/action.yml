@@ -11,8 +11,13 @@ inputs:
     default: production
   repo:
     description: The image repo we're trying to build for
+  registry:
+    description: The Docker registry we're pushing to.
   latest-tag:
     description: The tag for latest
+  push:
+    description: Whether or not to push the generated image.
+    default: "false"
   version:
     description: The semantic version
     default: "1.0"
@@ -23,12 +28,20 @@ runs:
       id: build-tags
       if: ${{ inputs.repo }}
       run: |
-        IMAGE="${{ inputs.repo }}/${{ inputs.target }}"
+        IMAGE="${{ format('{0}/{1}/{2}', inputs.registry, inputs.repo, inputs.target }}"
         echo 'tags<<EOF' >> $GITHUB_OUTPUT
         echo "${IMAGE}:${{ inputs.latest-tag }}" >> $GITHUB_OUTPUT
         echo "${IMAGE}:${{ inputs.version }}.${{ github.run_id }}-${{ inputs.environment }}" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
     - uses: actions/checkout@v3
+    - if: ${{ inputs.push == 'true' }} 
+      uses: aws-actions/amazon-ecr-login@v1
+    - if: ${{ inputs.push == 'true' }}
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ steps.aws-ecr-login.outputs.username }}
+        password: ${{ steps.aws-ecr-login.outputs.password }}
     - if: ${{ inputs.base-image }}
       uses: actions/download-artifact@v3
       with:
@@ -48,7 +61,7 @@ runs:
         cache-to: type=gha,mode=max
         context: .
         outputs: type=docker,dest=/tmp/${{ inputs.target }}.tar
-        push: false
+        push: ${{ inputs.push }}
         target: ${{ inputs.target }}
         tags: |
           ${{ steps.build-tags.outputs.tags }}

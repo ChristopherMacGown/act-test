@@ -22,7 +22,7 @@ runs:
       with:
         cmd: build
         dir: ${{ inputs.dir }}
-    - uses: actions/upload-artifact@v3
-      with:
-        name: front-end
-        path: ${{ inputs.dir}}/dist/
+    - shell: bash
+      run: |
+        aws s3 sync ${{ inputs.dir }}/dist/ s3://app.drill.run-production-green
+        
