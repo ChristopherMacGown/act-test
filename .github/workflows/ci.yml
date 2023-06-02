@@ -143,4 +143,8 @@ jobs:
           aws-region: us-west-2
       - run: |
           pip install --disable-pip-version-check fabric
+          
+          if [ "${{matrix.service.name}}" != "front-end" ]; then
+            echo "DEPLOY IMAGES FIRST!"
+          fi
           fab --dry ${{ format('deploy-{0}', matrix.service.name ) }} --stack production

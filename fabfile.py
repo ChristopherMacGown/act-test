@@ -7,4 +7,8 @@ def deploy_api(self, *args, **kwargs):
 
 @task
 def deploy_scheduler(self, *args, **kwargs):
-    print("would deploy api!")
+    print("would deploy scheduler!")
+
+@task
+def deploy_front_end(self, *args, **kwargs):
+    print("would deploy front-end!")
