@@ -14,5 +14,5 @@ def deploy_front_end(self, *args, **kwargs):
     print("would deploy front-end!")
 
 @task
-def deploy_lambdas(self, *args, **kwargs);
+def deploy_lambdas(self, *args, **kwargs):
     print("would deploy lambdas")
