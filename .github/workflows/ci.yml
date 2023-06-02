@@ -66,10 +66,10 @@ jobs:
             kind: yarn
           - name: api
             kind: docker
-          - name: bit-runner
-            kind: docker
-          - name: task-scheduler
-            kind: docker
+#          - name: bit-runner
+#            kind: docker
+#          - name: task-scheduler
+#            kind: docker
     name: ${{ matrix.artifact.name }}
     steps:
       - uses: actions/checkout@v3
@@ -79,7 +79,7 @@ jobs:
           target: ${{ matrix.artifact.name }}
           base-image: ${{ needs.prepare-build.outputs.base-image }}
           latest-tag: ${{ github.branch == 'main' && 'latest' || format('staging_pr_{0}', github.run_id) }}
-          repo: "emr.url.amazonaws.com/oreburgh"
+          repo: "391739045280.dkr.ecr.us-west-2.amazonaws.com/act-test"
       - if: ${{ matrix.artifact.kind == 'yarn' }}
         uses: ./.github/actions/build-yarn-bundle
         with:
@@ -96,12 +96,18 @@ jobs:
             kind: yarn
           - name: api
             kind: docker
-          - name: bit-runner
-            kind: docker
-          - name: task-scheduler
-            kind: docker
+#          - name: bit-runner
+#            kind: docker
+#          - name: task-scheduler
+#            kind: docker
     name: ${{ matrix.artifact.name }}
     steps:
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::391739045280:role/Github-CI+CD-Deployment-Role
+          aws-region: us-west-2
+      - id: aws-ecr-login
+        uses: aws-actions/amazon-ecr-login@v1
       - uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.artifact.name }}
@@ -109,5 +115,6 @@ jobs:
         run: |
           docker load --input ${{ matrix.artifact.name }}.tar
           docker image ls -a
+          docker image push --all-tags 391739045280.dkr.ecr.us-west-2.amazonaws.com/act-test/${{ matrix.artifact.name }}
       - if: ${{ matrix.artifact.kind == 'yarn' }}
         run: ls -alh .
