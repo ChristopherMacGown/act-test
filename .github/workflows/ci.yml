@@ -112,13 +112,12 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.artifact.name }}
+          path: dist/
       - if: ${{ matrix.artifact.kind == 'docker' }}
         run: |
-          docker load --input ${{ matrix.artifact.name }}.tar
+          docker load --input dist/${{ matrix.artifact.name }}.tar
           docker image ls -a
           docker image push --all-tags 391739045280.dkr.ecr.us-west-2.amazonaws.com/act-test/${{ matrix.artifact.name }}
       - if: ${{ matrix.artifact.kind == 'yarn' }}
         run: |
-          ls -alh .
-          tar xf ${{ matrix.artifact.name }}.tar
-          aws s3 sync ${{ matrix.artifact.name }}/dist/ s3://app.drill.run-production-green
+          aws s3 sync dist/ s3://app.drill.run-production-green
