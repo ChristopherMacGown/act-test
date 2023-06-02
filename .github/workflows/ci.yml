@@ -108,8 +108,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::391739045280:role/Github-CI+CD-Deployment-Role
           aws-region: us-west-2
-      - id: aws-ecr-login
-        uses: aws-actions/amazon-ecr-login@v1
+      - uses: aws-actions/amazon-ecr-login@v1
       - uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.artifact.name }}
@@ -119,4 +118,6 @@ jobs:
           docker image ls -a
           docker image push --all-tags 391739045280.dkr.ecr.us-west-2.amazonaws.com/act-test/${{ matrix.artifact.name }}
       - if: ${{ matrix.artifact.kind == 'yarn' }}
-        run: ls -alh .
+        run: |
+          tar xf ${{ matrix.artifact.name }}.tar
+          aws s3 sync ${{ matrix.artifact.name }}/dist/ s3://app.drill.run-production-green
