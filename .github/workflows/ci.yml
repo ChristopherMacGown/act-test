@@ -144,5 +144,5 @@ jobs:
       - if: ${{ matrix.service.is-front-end == 'false' }}
         uses: ./github/actions/fabric
         with:
-          task: ${{ format("deploy-{0}", matrix.service.name ) }}
+          task: ${{ format('deploy-{0}', matrix.service.name ) }}
           args: stack --production
