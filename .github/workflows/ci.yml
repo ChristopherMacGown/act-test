@@ -101,6 +101,8 @@ jobs:
 #          - name: task-scheduler
 #            kind: docker
     name: ${{ matrix.artifact.name }}
+    permissions:
+      id-token: write
     steps:
       - uses: aws-actions/configure-aws-credentials@v2
         with:
