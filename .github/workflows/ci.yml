@@ -143,7 +143,7 @@ jobs:
         run: |
           echo deploy ${{ matrix.service.name }}
       - if: ${{ matrix.service.is-front-end != 'true' }}
-        uses: ./github/actions/fabric
+        uses: ./.github/actions/fabric
         with:
           task: ${{ format('deploy-{0}', matrix.service.name ) }}
           args: stack --production
