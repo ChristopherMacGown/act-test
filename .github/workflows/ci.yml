@@ -119,5 +119,6 @@ jobs:
           docker image push --all-tags 391739045280.dkr.ecr.us-west-2.amazonaws.com/act-test/${{ matrix.artifact.name }}
       - if: ${{ matrix.artifact.kind == 'yarn' }}
         run: |
+          ls -alh .
           tar xf ${{ matrix.artifact.name }}.tar
           aws s3 sync ${{ matrix.artifact.name }}/dist/ s3://app.drill.run-production-green
