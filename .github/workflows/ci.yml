@@ -64,8 +64,8 @@ jobs:
         artifact:
           - name: front-end
             kind: yarn
-          - name: api
-            kind: docker
+#          - name: api
+#            kind: docker
 #          - name: bit-runner
 #            kind: docker
 #          - name: task-scheduler
@@ -94,8 +94,8 @@ jobs:
         artifact:
           - name: front-end
             kind: yarn
-          - name: api
-            kind: docker
+#          - name: api
+#            kind: docker
 #          - name: bit-runner
 #            kind: docker
 #          - name: task-scheduler
